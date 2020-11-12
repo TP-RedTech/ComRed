@@ -23,8 +23,9 @@ class Document{
 
   std::string getText();
 
-  void updateText(std::vector<Operation> operation);
+  void addOwner(int ownerId);
 
+  void updateText(std::vector<Operation> operation);
 
 };
 
