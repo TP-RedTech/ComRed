@@ -1,5 +1,5 @@
-#ifndef UTILS_INCLUDE_USERS_H_
-#define UTILS_INCLUDE_USERS_H_
+#ifndef UTILS_INCLUDE_USER_H_
+#define UTILS_INCLUDE_USER_H_
 
 #include <iostream>
 #include <vector>
@@ -36,4 +36,4 @@ class User {
 
 };
 
-#endif //UTILS_INCLUDE_USERS_H_
+#endif //UTILS_INCLUDE_USER_H_
