@@ -5,13 +5,13 @@
 #include <vector>
 #include "Header.h"
 
-namespace http::server {
+namespace http{
 struct Request {
   std::string method;
   std::string uri;
   int http_version_major;
   int http_version_minor;
-  std::vector<header> headers;
+  std::vector<Header> headers;
 };
 }
 

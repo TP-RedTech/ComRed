@@ -3,10 +3,10 @@
 
 #include <string>
 
-struct header
+struct Header
 {
     std::string name;
     std::string value;
 };
 
-#endif //COMREDSERVER_HEADER_H
+#endif

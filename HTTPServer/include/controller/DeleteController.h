@@ -3,10 +3,10 @@
 
 #include "requests/Request.h"
 #include "requests/Reply.h"
-#include "BaseController.h"
+#include "Controller.h"
 
 namespace http::server {
-class DeleteController : public BaseController {
+class DeleteController : public Controller {
 public:
   DeleteController();
   Reply handleRequest(const Request &request) override;

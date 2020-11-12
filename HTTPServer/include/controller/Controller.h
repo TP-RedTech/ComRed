@@ -5,9 +5,9 @@
 #include "requests/Reply.h"
 
 namespace http::server {
-class BaseController {
+class Controller {
 public:
-  BaseController();
+  Controller();
   virtual Reply handleRequest(const Request &request) = 0;
 };
 }

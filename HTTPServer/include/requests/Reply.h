@@ -6,7 +6,6 @@
 #include "Header.h"
 
 namespace http {
-namespace server {
 struct Reply {
   enum StatusType {
     ok = 200,
@@ -27,10 +26,9 @@ struct Reply {
     service_unavailable = 503
   } status;
 
-  std::vector<header> headers;
+  std::vector<Header> headers;
 
   std::string content;
 };
-}
 }
 #endif //COMREDSERVER_INCLUDE_REQUESTS_REPLY_H
