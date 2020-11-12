@@ -17,8 +17,6 @@ class Document{
  public:
   Document();
 
-  void setId(int newId);
-
   int getId() const;
 
   std::string getText();
@@ -27,6 +25,7 @@ class Document{
 
   void updateText(std::vector<Operation> operation);
 
+  void setId(int newId);
 };
 
 #endif //UTILS_INCLUDE_DOCUMENT_H_

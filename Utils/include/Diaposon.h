@@ -9,6 +9,8 @@ class Diaposon {
   size_t endPos;
 
  public:
+  Diaposon();
+
   Diaposon(size_t start, size_t end);
 
   size_t getStartPos();

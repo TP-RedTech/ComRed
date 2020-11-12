@@ -12,6 +12,7 @@ class BaseChange{
   TypeChange typeChange;
 
  public:
+  BaseChange();
   BaseChange(TypeChange typeChange);
 
   virtual TypeChange type() = 0;
