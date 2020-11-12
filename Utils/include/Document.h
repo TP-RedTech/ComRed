@@ -5,39 +5,26 @@
 #include <vector>
 
 #include "BaseChange.h"
+#include "Operation.h"
 
-class Operation{
+class Document{
  private:
-  int revision;
-  int idEditor;
-  size_t lengthBeforeOperation;
-  size_t lengthAfterOperation;
-  std::vector<BaseChange> changes;
+  int id;
+  std::string password;
+  std::vector<int> ownersId;
+  std::string text;
 
  public:
-  Operation();
+  Document();
 
-  void setRevision(int newRevision);
+  void setId(int newId);
 
-  int getRevision() const;
+  int getId() const;
 
-  void setIdEditor(int newId);
+  std::string getText();
 
-  int getIdEditor() const;
+  void updateText(std::vector<Operation> operation);
 
-  void setLengthBeforeOperation(size_t newLength);
-
-  void setLengthAfterOperation(size_t newLength);
-
-  size_t getLengthBeforeOperation() const;
-
-  size_t getLengthAfterOperation() const;
-
-  size_t getSizeOfChanges() const;
-
-  void addChange(BaseChange newChange);
-
-  Operation mergeOperations(Operation anotherOperation);
 
 };
 
