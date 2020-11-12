@@ -2,19 +2,19 @@
 #define UTILS_INCLUDE_BASECHANGE_H_
 
 class BaseChange{
+ public:
   enum TypeChange {
     DIAPOSON,
     INDEX,
     CONTENT,
   };
-
  private:
   TypeChange typeChange;
 
  public:
   BaseChange(TypeChange typeChange);
 
-  TypeChange type();
+  virtual TypeChange type() = 0;
 
 };
 
