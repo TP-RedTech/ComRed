@@ -4,6 +4,7 @@
 #include "vector"
 #include "string"
 #include "queue"
+#include "Editor.h"
 #include "undefStructs.h"
 
 class BaseEditorManager {
@@ -19,9 +20,11 @@ public:
 
 class EditorManager: public BaseEditorManager {
 public:
-    EditorManager(Document document) {}
+    EditorManager(Document document): BaseEditorManager() {
+        this->document = document;
+    }
     Operation changeOperationRelativelyOthers(Operation operation) override {}
-    void addOperationToLog(Operation operation) override {}
+    void addOperationToLog(Operation operation) override;
     void acceptOperation(Operation operation) override {}
     void changeServerDocument(Document document) override {}
     void sendOperationToClient(Operation operation) override {}
@@ -30,7 +33,8 @@ public:
 private:
     Document document;
     std::vector<Operation> logRevision;
-    std::queue<Operation> waitinForProcessing;
+    std::vector<Editor> editors;
+    std::queue<Operation> waitingForProcessing;
 };
 
 #endif //UNTITLED_EDITORMANAGER_H
