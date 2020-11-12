@@ -1,11 +1,8 @@
 #ifndef UNTITLED_EDITORMANAGER_H
 #define UNTITLED_EDITORMANAGER_H
 
-#include "vector"
-#include "string"
-#include "queue"
+#include "ServerHeader.h"
 #include "Editor.h"
-#include "undefStructs.h"
 
 class BaseEditorManager {
 public:
@@ -23,12 +20,12 @@ public:
     EditorManager(Document document): BaseEditorManager() {
         this->document = document;
     }
-    Operation changeOperationRelativelyOthers(Operation operation) override {}
+    Operation changeOperationRelativelyOthers(Operation operation) override;
     void addOperationToLog(Operation operation) override;
-    void acceptOperation(Operation operation) override {}
-    void changeServerDocument(Document document) override {}
-    void sendOperationToClient(Operation operation) override {}
-    void sendAnswerToOriginalClient(Operation operation) override {}
+    void acceptOperation(Operation operation) override;
+    void changeServerDocument(Document document) override;
+    void sendOperationToClient(Operation operation) override;
+    void sendAnswerToOriginalClient(Operation operation) override;
 
 private:
     Document document;

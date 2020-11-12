@@ -1,8 +1,7 @@
 #ifndef UNTITLED_DOCUMENTMANAGER_H
 #define UNTITLED_DOCUMENTMANAGER_H
 
-#include "string"
-#include "undefStructs.h"
+#include "ServerHeader.h"
 
 class BaseDocumentManager {
 public:
@@ -18,11 +17,11 @@ public:
 class DocumentManager: public BaseDocumentManager {
 public:
     DocumentManager() = default;
-    void addUser(int idUser, int idDocument) override {}
-    int createDocument() override {}
-    std::string deleteDocument() override {}
-    Document getByIdUser(int idUser) override {}
-    Document getByIdDocument(int idDocument) override {}
+    void addUser(int idUser, int idDocument) override;
+    int createDocument() override;
+    std::string deleteDocument() override;
+    Document getByIdUser(int idUser) override;
+    Document getByIdDocument(int idDocument) override;
 };
 
 #endif //UNTITLED_DOCUMENTMANAGER_H

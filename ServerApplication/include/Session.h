@@ -1,9 +1,7 @@
 #ifndef UNTITLED_SESSION_H
 #define UNTITLED_SESSION_H
 
-#include "string"
-#include "vector"
-#include "undefStructs.h"
+#include "ServerHeader.h"
 #include "EditorManager.h"
 
 class BaseSession {
@@ -16,8 +14,8 @@ public:
 class Session: public BaseSession {
 public:
     Session() = default;
-    virtual void manageOperation(Operation operation) override {}
-    virtual std::vector<Operation> sendToServerBufOfhanger() override {}
+    void manageOperation(Operation operation) override;
+    std::vector<Operation> sendToServerBufOfhanger() override;
 
 private:
     EditorManager editorManager;

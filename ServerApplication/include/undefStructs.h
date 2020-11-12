@@ -3,6 +3,8 @@
 
 struct Operation{};
 
-struct Document{};
+struct Document{
+    Document() = default;
+};
 
 #endif //UNTITLED_UNDEFSTRUCTS_H

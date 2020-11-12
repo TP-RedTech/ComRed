@@ -1,9 +1,7 @@
 #ifndef UNTITLED_EDITOR_H
 #define UNTITLED_EDITOR_H
 
-#include "vector"
-#include "string"
-#include "undefStructs.h"
+#include "ServerHeader.h"
 
 class BaseEditor {
 public:
@@ -18,11 +16,11 @@ public:
 class Editor: public BaseEditor {
 public:
     Editor() = default;
-    Operation submitToServer(Operation operation) override {};
-    void hearChangesFromServer() override {};
-    void hearSubmitFromServer() override {};
-    Operation makeNewOperation() override {};
-    void changeDocument(Operation operation) override {};
+    Operation submitToServer(Operation operation) override;
+    void hearChangesFromServer() override;
+    void hearSubmitFromServer() override;
+    Operation makeNewOperation() override;
+    void changeDocument(Operation operation) override;
 
 private:
     int syncRevision;
