@@ -1,1 +1,8 @@
 *.DS_Store
+*.o
+*.exe
+*.out
+*build*
+*.idea
+*.vscdode
+ 
