@@ -3,8 +3,8 @@
 
 #include <memory>
 #include "DBController.h"
-//#include "User.h"
-//#include "Document.h"
+#include "../../Utils/include/User.h"
+#include "../../Utils/include/Document.h"
 
 using namespace std;
 

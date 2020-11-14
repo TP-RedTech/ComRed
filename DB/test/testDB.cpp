@@ -6,9 +6,10 @@ using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
 
-#include "../inc/AbstractDBController.h"
-#include "../inc/DocumentRepository.h"
-#include "../inc/UserRepository.h"
+#include "../include/AbstractDBController.h"
+#include "../include/DocumentRepository.h"
+#include "../include/UserRepository.h"
+#include "../../ServerApplication/include/ServerApplication.h"
 
 class MockDBController : public AbstractDBController
 {

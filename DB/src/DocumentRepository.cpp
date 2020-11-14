@@ -1,4 +1,4 @@
-#include "../inc/DocumentRepository.h"
+#include "../include/DocumentRepository.h"
 
 DocumentRepository::DocumentRepository(weak_ptr<AbstractDBController> ctrl) {}
     

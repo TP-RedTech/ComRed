@@ -1,4 +1,4 @@
-#include "../inc/DBController.h"
+#include "../include/DBController.h"
 
 DBController::DBController(int size) {}
 

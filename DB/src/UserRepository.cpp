@@ -1,4 +1,4 @@
-#include "../inc/UserRepository.h"
+#include "../include/UserRepository.h"
 
 UserRepository::UserRepository(weak_ptr<AbstractDBController> ctrl) {}
     
