@@ -10,4 +10,4 @@ file(GLOB sources
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
         )
 
-add_executable(backend main.cpp ${sources})
+add_executable(backend main.cpp ${sources} src/Editor.cpp include/EditorManagerDelegate.h include/EditorListener.h)

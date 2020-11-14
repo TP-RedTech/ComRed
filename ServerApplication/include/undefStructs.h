@@ -7,4 +7,12 @@ struct Document{
     Document() = default;
 };
 
+struct DocumentRepository {
+
+};
+
+struct UserRepository {
+
+};
+
 #endif //UNTITLED_UNDEFSTRUCTS_H

@@ -36,8 +36,8 @@ public:
 
 private:
     std::unique_ptr<std::vector<Session>> sessions;
-    std::unique_ptr<DocumentManager> documentManager;
-    std::unique_ptr<UserManager> userManager;
+    std::shared_ptr<DocumentRepository> documentManager;
+    std::shared_ptr<UserRepository> userManager;
 };
 
 
