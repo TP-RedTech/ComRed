@@ -53,29 +53,57 @@ TEST_F(TestDBController, workWithUser)
     urep.getById(user.getId());
 }
 
-
-// TO_DO: перенести в другой файл
-/*
 class MockUserRepository : public UserRepositoryI
 {
 public:
-    explicit MockUserRepository(weak_ptr<AbstractDBController> db) : 
-        UserRepositoryI(db) {}
-
     MOCK_METHOD1(createTest, void(User&));
     MOCK_METHOD1(getTest, User(int));
 };
 
 TEST(UserRepository, methodsCall)
 {
-    shared_ptr<DBController> db_ctrl = make_shared<DBController>();
-    MockUserRepository murep(db_ctrl);
-    UserManager manager(murep);
+    MockUserRepository murep;
+    ServerApplication appServer;
     User user;
     EXPECT_CALL(murep, createTest(user)).Times(AtLeast(1));
     EXPECT_CALL(murep, getTest(user.getId())).Times(AtLeast(1));
-    manager.create("");
-    managet.getById(user.getId());
+    appServer.registerUser("");
+    appServer.loginUser(); // ???
 }
 
-*/
+class MockDocumentRepository : public DocumentRepositoryI
+{
+public:
+    MOCK_METHOD1(createTest, void(Document&));
+    MOCK_METHOD1(changeTest, void(Document&));
+    MOCK_METHOD1(deleteTest, void(Document&));
+    MOCK_METHOD1(getIdTest, Document(int));
+    MOCK_METHOD1(getUserTest, Document(User&));
+    MOCK_METHOD2(addUserTest, void(User&, Document&));
+};
+
+TEST(DocumentRepository, methodsCall)
+{
+    MockDocumentRepository mdrep;
+    ServerApplication appServer;
+    Document doc;
+    User user;
+    EXPECT_CALL(mdrep, createTest(doc)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, changeTest(doc)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, getIdTest(doc)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, addUserTest(user, doc)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, getUserTest(user)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, deleteTest(doc)).Times(AtLeast(1));
+    appServer.createDocument();
+    Operation op;
+    appServer.updateDocument(op);
+    appServer.readDocument();
+    appServer.connectDocument(user.getId(), doc.getId());
+    appServer.connectDocument(user.getId(), doc.getId());
+    appServer.deleteDocument();
+}
+
+int main(int argc, char** argv) {
+  ::testing::InitGoogleMock(&argc, argv);
+  return RUN_ALL_TESTS();
+}
