@@ -33,7 +33,7 @@ size_t Operation::getLengthBeforeOperation() const {
 }
 
 size_t Operation::getLengthAfterOperation() const {
-  return size_t()
+  return size_t();
 }
 
 size_t Operation::getSizeOfChanges() const {
