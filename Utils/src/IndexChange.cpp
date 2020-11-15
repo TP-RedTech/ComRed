@@ -4,11 +4,15 @@ IndexChange::IndexChange() {
 
 }
 
+IndexChange::IndexChange(int index) {
+
+}
+
 int IndexChange::getIndex() {
   return int();
 }
 
-BaseChange::TypeChange IndexChange::type() {
-  return BaseChange::TypeChange();
+void IndexChange::applyChanges() {
+
 }
 

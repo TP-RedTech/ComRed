@@ -11,10 +11,11 @@ class ContentChange: public BaseChange {
 
  public:
   ContentChange();
+  ContentChange(std::string str);
 
   std::string getContent();
 
-  TypeChange type() override;
+ void applyChanges() override;
 };
 
 #endif //UTILS_INCLUDE_CONTENTCHANGE_H_

@@ -4,11 +4,15 @@ DiaposonChange::DiaposonChange(){
 
 }
 
+DiaposonChange::DiaposonChange(int start, int end) {
+
+}
+
 Diaposon DiaposonChange::getDiaposon() {
 
 }
 
-BaseChange::TypeChange DiaposonChange::type() {
+void DiaposonChange::applyChanges() {
 
 }
 
