@@ -17,6 +17,8 @@ class Document{
  public:
   Document();
 
+  ~Document();
+
   int getId() const;
 
   std::string getText();

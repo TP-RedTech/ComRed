@@ -12,6 +12,7 @@ class ContentChange: public BaseChange {
  public:
   ContentChange();
   ContentChange(std::string str);
+  ~ContentChange();
 
   std::string getContent();
 

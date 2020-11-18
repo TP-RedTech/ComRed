@@ -8,8 +8,12 @@ DiaposonChange::DiaposonChange(int start, int end) {
 
 }
 
-Diaposon DiaposonChange::getDiaposon() {
+DiaposonChange::~DiaposonChange() {
 
+}
+
+Diaposon DiaposonChange::getDiaposon() {
+  return Diaposon();
 }
 
 void DiaposonChange::applyChanges() {

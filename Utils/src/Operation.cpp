@@ -4,6 +4,10 @@ Operation::Operation() {
 
 }
 
+Operation::~Operation() {
+
+}
+
 void Operation::setRevision(int newRevision) {
 
 }
@@ -40,12 +44,12 @@ size_t Operation::getSizeOfChanges() const {
   return size_t();
 }
 
-void Operation::addChange(BaseChange newChange) {
+void Operation::addChange(std::shared_ptr<BaseChange> newChange) {
 
 }
 
-std::vector<BaseChange> Operation::getChanges() {
-
+std::vector<std::shared_ptr<BaseChange>> Operation::getChanges() {
+  return std::vector<std::shared_ptr<BaseChange>>();
 }
 
 Operation Operation::mergeOperations(Operation anotherOperation) {

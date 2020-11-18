@@ -12,10 +12,12 @@ class Operation{
   int idEditor;
   size_t lengthBeforeOperation;
   size_t lengthAfterOperation;
-  std::vector<BaseChange> changes;
+  std::vector<std::shared_ptr<BaseChange>> changes;
 
  public:
   Operation();
+
+  ~Operation();
 
   void setRevision(int newRevision);
 
@@ -35,9 +37,9 @@ class Operation{
 
   size_t getSizeOfChanges() const;
 
-  void addChange(BaseChange newChange);
+  void addChange(std::shared_ptr<BaseChange> newChange);
 
-  std::vector<BaseChange> getChanges();
+  std::vector<std::shared_ptr<BaseChange>> getChanges();
 
   Operation mergeOperations(Operation anotherOperation);
 

@@ -13,6 +13,7 @@ class DiaposonChange: public BaseChange {
  public:
   DiaposonChange();
   DiaposonChange(int start, int end);
+  ~DiaposonChange();
 
   Diaposon getDiaposon();
 

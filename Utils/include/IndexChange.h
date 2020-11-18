@@ -12,6 +12,7 @@ class IndexChange: public BaseChange {
  public:
   IndexChange();
   IndexChange(int index);
+  ~IndexChange();
 
   int getIndex();
 
