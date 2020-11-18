@@ -3,8 +3,6 @@
 
 #include "ServerHeader.h"
 #include "Session.h"
-#include "DocumentManager.h"
-#include "UserManager.h"
 
 class BaseServerApplication {
 public:
