@@ -37,6 +37,8 @@ class Operation{
 
   void addChange(BaseChange newChange);
 
+  std::vector<BaseChange> getChanges();
+
   Operation mergeOperations(Operation anotherOperation);
 
 };

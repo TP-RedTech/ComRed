@@ -44,6 +44,10 @@ void Operation::addChange(BaseChange newChange) {
 
 }
 
+std::vector<BaseChange> Operation::getChanges() {
+
+}
+
 Operation Operation::mergeOperations(Operation anotherOperation) {
   return Operation();
 }
