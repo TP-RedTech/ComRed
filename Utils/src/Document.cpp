@@ -20,6 +20,6 @@ void Document::addOwner(int ownerId) {
 
 }
 
-void Document::updateText(std::vector<Operation> operation) {
+void Document::updateText(Operation operation) {
 
 }

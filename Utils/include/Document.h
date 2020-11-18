@@ -23,7 +23,7 @@ class Document{
 
   void addOwner(int ownerId);
 
-  void updateText(std::vector<Operation> operation);
+  void updateText(Operation operation);
 
   void setId(int newId);
 };
