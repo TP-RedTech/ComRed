@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "gtest/gmock.h"
+#include "gmock/gmock.h"
 
 TEST(test, test)
 {

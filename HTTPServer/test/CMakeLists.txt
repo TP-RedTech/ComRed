@@ -6,10 +6,6 @@ list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/main.c")
 file(GLOB tests "${PROJECT_SOURCE_DIR}/test/*.cpp")
 list(REMOVE_ITEM tests "${PROJECT_SOURCE_DIR}/test/main.cpp")
 
-if (ENABLE_GCOV)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage -fprofile-arcs")
-endif ()
-
 foreach (file ${tests})
     set(name)
     get_filename_component(name ${file} NAME_WE)
@@ -17,6 +13,6 @@ foreach (file ${tests})
             ${sources}
             ${file}
             "${PROJECT_SOURCE_DIR}/test/main.cpp")
-    target_link_libraries("${name}_tests" gtest_main)
+    target_link_libraries("${name}_tests" gtest_main gmock_main)
     add_test(NAME ${name} COMMAND "${name}_tests")
 endforeach ()
