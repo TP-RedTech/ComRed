@@ -25,9 +25,7 @@ struct Reply {
     bad_gateway = 502,
     service_unavailable = 503
   } status;
-
-  std::vector<Header> headers;
-
+  Headers headers;
   std::string content;
 };
 }

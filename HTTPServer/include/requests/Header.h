@@ -2,11 +2,12 @@
 #define COMREDSERVER_HEADER_H
 
 #include <string>
+#include <utility>
+#include <unordered_map>
 
-struct Header
-{
-    std::string name;
-    std::string value;
-};
+namespace http {
+using Header = std::pair<std::string, std::string>;
+using Headers = std::unordered_map<std::string, std::string>;
+}
 
 #endif
