@@ -2,6 +2,6 @@
 http::server::EditControllerCreator::EditControllerCreator() {
 
 }
-std::shared_ptr<Controller> http::server::EditControllerCreator::createController() {
+std::shared_ptr<http::server::Controller> http::server::EditControllerCreator::createController() {
   return std::shared_ptr<Controller>();
 }

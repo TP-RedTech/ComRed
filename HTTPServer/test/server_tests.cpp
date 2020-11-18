@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
-#include <cstring>
-
+#include "gtest/gmock.h"
 
 TEST(test, test)
 {

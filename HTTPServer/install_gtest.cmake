@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.1)
 
 project(extern-download NONE)
 
-
 include(ExternalProject)
 ExternalProject_Add(
         googletest

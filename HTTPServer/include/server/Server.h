@@ -7,7 +7,7 @@ namespace http::server {
 class Server {
 public:
   explicit Server(const std::string &address,
-                  const std::string &port);
+                  int port);
 
   void run();
 };

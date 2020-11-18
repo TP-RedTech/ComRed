@@ -2,6 +2,6 @@
 http::server::LogoutControllerCreator::LogoutControllerCreator() {
 
 }
-std::shared_ptr<Controller> http::server::LogoutControllerCreator::createController() {
+std::shared_ptr<http::server::Controller> http::server::LogoutControllerCreator::createController() {
   return std::shared_ptr<Controller>();
 }
