@@ -12,10 +12,11 @@ class DiaposonChange: public BaseChange {
 
  public:
   DiaposonChange();
+  DiaposonChange(int start, int end);
 
   Diaposon getDiaposon();
 
-  TypeChange type() override;
+  void applyChanges() override;
 };
 
 #endif //UTILS_INCLUDE_DIAPOSONCHANGE_H_

@@ -4,9 +4,10 @@
 #include "ServerHeader.h"
 
 #include "EditorManagerDelegate.h"
-
 #include "Editor.h"
 #include "EditorListener.h"
+
+#include "../../Utils/include/Document.h"
 
 class BaseEditorManager {
 public:
@@ -20,6 +21,7 @@ public:
 
 class EditorManager: public BaseEditorManager, public EditorManagerDelegate {
 public:
+    EditorManager();
     EditorManager(Document document): BaseEditorManager() {
         this->document = document;
     }

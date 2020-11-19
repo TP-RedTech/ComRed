@@ -11,10 +11,11 @@ class IndexChange: public BaseChange {
 
  public:
   IndexChange();
+  IndexChange(int index);
 
   int getIndex();
 
-  TypeChange type() override;
+  void applyChanges() override;
 };
 
 #endif //UTILS_INCLUDE_INDEXCHANGE_H_

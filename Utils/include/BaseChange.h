@@ -3,19 +3,8 @@
 
 class BaseChange{
  public:
-  enum TypeChange {
-    DIAPOSON,
-    INDEX,
-    CONTENT,
-  };
- private:
-  TypeChange typeChange;
-
- public:
   BaseChange();
-  BaseChange(TypeChange typeChange);
-
-  virtual TypeChange type() = 0;
+  virtual void applyChanges() = 0;
 
 };
 
