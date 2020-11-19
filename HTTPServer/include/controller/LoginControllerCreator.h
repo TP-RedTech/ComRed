@@ -4,12 +4,12 @@
 
 #include "ControllerCreator.h"
 
-namespace http::server {
+namespace http { namespace server {
 class LoginControllerCreator : public ControllerCreator {
 public:
   LoginControllerCreator();
   std::shared_ptr<Controller> createController() override = 0;
 };
-}
+} }
 
 #endif

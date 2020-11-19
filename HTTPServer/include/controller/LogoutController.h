@@ -5,12 +5,12 @@
 #include "requests/Request.h"
 #include "requests/Reply.h"
 
-namespace http::server {
+namespace http { namespace server {
 class LogoutController : public Controller {
 public:
   LogoutController();
   Reply handleRequest(const Request &request) override;
 };
-}
+} }
 
 #endif

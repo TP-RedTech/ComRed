@@ -5,12 +5,12 @@
 #include <memory>
 #include "Controller.h"
 
-namespace http::server {
+namespace http { namespace server {
 class ConnectControllerCreator {
 public:
   ConnectControllerCreator();
   virtual std::shared_ptr<Controller> createController();
 };
-}
+} }
 
 #endif //COMREDSERVER_INCLUDE_CONTROLLER_CONNECTCONTROLLERCREATOR_H

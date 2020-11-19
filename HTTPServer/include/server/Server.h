@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace http::server {
+namespace http { namespace server {
 class Server {
 public:
   explicit Server(const std::string &address,
@@ -11,6 +11,6 @@ public:
 
   void run();
 };
-}
+} }
 
 #endif //COMREDSERVER_SERVER_H
