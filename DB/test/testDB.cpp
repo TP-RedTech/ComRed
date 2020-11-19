@@ -11,6 +11,9 @@ using ::testing::SetArgReferee;
 #include "../include/UserRepository.h"
 #include "../../ServerApplication/include/ServerApplication.h"
 
+bool operator ==(const User &op1, const User &op2) { return true; }
+bool operator ==(const Document &op1, const Document &op2) { return true; }
+
 class MockDBController : public AbstractDBController
 {
 public:
@@ -90,7 +93,7 @@ TEST(DocumentRepository, methodsCall)
     User user;
     EXPECT_CALL(mdrep, createTest(doc)).Times(AtLeast(1));
     EXPECT_CALL(mdrep, changeTest(doc)).Times(AtLeast(1));
-    EXPECT_CALL(mdrep, getIdTest(doc)).Times(AtLeast(1));
+    EXPECT_CALL(mdrep, getIdTest(doc.getId())).Times(AtLeast(1));
     EXPECT_CALL(mdrep, addUserTest(user, doc)).Times(AtLeast(1));
     EXPECT_CALL(mdrep, getUserTest(user)).Times(AtLeast(1));
     EXPECT_CALL(mdrep, deleteTest(doc)).Times(AtLeast(1));

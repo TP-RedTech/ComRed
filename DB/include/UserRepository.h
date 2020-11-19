@@ -10,7 +10,7 @@ using namespace std;
 class UserRepositoryI
 {
 public:
-    UserRepositoryI();
+    UserRepositoryI() = default;
     virtual ~UserRepositoryI() = default;
     virtual void createTest(User& u) = 0;
     virtual User getTest(int id) = 0;
