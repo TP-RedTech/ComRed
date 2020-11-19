@@ -8,7 +8,6 @@
 
 #include "client/Client.h"
 
-
 /*
 Добрый день!
 В данный момент этот класс должен находиться в папке ServerApplication,
@@ -16,6 +15,7 @@
 класс является связующим между http-сервером и логикой приложения.
 В ближайшее время это недарозумение будет приведено к порядочному виду.
  */
+
 class BaseServerApplication {
 public:
   BaseServerApplication() = default;
@@ -23,7 +23,9 @@ public:
 
   virtual int createDocument(std::string userData, std::string documentName) = 0;
 
-  virtual std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) = 0;
+  virtual std::vector<std::string> updateDocument(std::string userData,
+                                                  int docId,
+                                                  std::vector<std::string> operations) = 0;
 
   virtual void deleteDocument(std::string userData, int docId) = 0;
 
@@ -31,13 +33,11 @@ public:
 
   virtual std::string connectDocument(std::string userData, int docId) = 0;
 
-  virtual std::string  loginUser(std::string userData) = 0;
+  virtual std::string loginUser(std::string userData) = 0;
 
   virtual std::string registerUser(std::string userData) = 0;
 
   virtual std::string logoutUser(std::string userData) = 0;
-
-  virtual std::string updateUser(std::string userData, std::string newUserData) = 0;
 };
 
 using namespace std;
@@ -64,119 +64,213 @@ public:
 
   MOCK_METHOD1(logoutUser, string(string userData));
 
-  MOCK_METHOD2(updateUser, string(string userData, string newUserData));
 };
 
 using namespace http;
 
-class MockClient : public Client {
-public:
-  MockClient() = default;
-  MOCK_METHOD0(run, void());
-};
+//
+//class MockClient : public Client {
+//public:
+//  MockClient() = default;
+//  MOCK_METHOD0(run, void());
+//};
+//
+//class MockConnectController : public server::ConnectController {
+//public:
+//  MockConnectController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockCreateController : public server::CreateController {
+//public:
+//  MockCreateController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockDeleteController : public server::DeleteController {
+//public:
+//  MockDeleteController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockEditController : public server::EditController {
+//public:
+//  MockEditController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockLoginController : public server::LoginController {
+//public:
+//  MockLoginController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockLogoutController : public server::LogoutController {
+//public:
+//  MockLogoutController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
+//class MockRegistrationController : public server::RegistrationController {
+//public:
+//  MockRegistrationController() = default;
+//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//};
+//
 
-class MockConnectController : public server::ConnectController {
-public:
-  MockConnectController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockCreateController : public server::CreateController {
-public:
-  MockCreateController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockDeleteController : public server::DeleteController {
-public:
-  MockDeleteController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockEditController : public server::EditController {
-public:
-  MockEditController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockLoginController : public server::LoginController {
-public:
-  MockLoginController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockLogoutController : public server::LogoutController {
-public:
-  MockLogoutController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
-
-class MockRegistrationController : public server::RegistrationController {
-public:
-  MockRegistrationController() = default;
-  MOCK_METHOD1(handleRequest, Reply(const Request &request));
-};
+using ::testing::_;
 
 class ConnectControllerTest : public ::testing::Test {
 protected:
   void SetUp() override {
-
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
   }
 
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::ConnectControllerCreator c;
 };
 
-TEST(ConnectControllerTest, test1) {
-  server::ConnectController c;
+TEST_F(ConnectControllerTest, test1) {
+  EXPECT_CALL(*application, connectDocument(_, _)).Times(1);
+
   Request q;
   q.headers["type"] = "connect";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "connect");
 }
 
-TEST(CreateControllerTest, test1) {
-  server::CreateController c;
+class CreateControllerTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::CreateControllerCreator c;
+};
+
+TEST_F(CreateControllerTest, test1) {
+  EXPECT_CALL(*application, createDocument(_, _)).Times(1);
+
   Request q;
   q.headers["type"] = "create";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "create");
 }
 
-TEST(DeleteControllerTest, test1) {
-  server::CreateController c;
+class DeleteControllerTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::DeleteControllerCreator c;
+};
+
+TEST_F(DeleteControllerTest, test1) {
+  EXPECT_CALL(*application, deleteDocument(_, _)).Times(1);
+
   Request q;
   q.headers["type"] = "delete";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "delete");
 }
 
-TEST(EditControllerTest, test1) {
-  server::CreateController c;
+class EditControllerTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::EditControllerCreator c;
+};
+
+TEST_F(EditControllerTest, test1) {
+  EXPECT_CALL(*application, updateDocument(_, _, _)).Times(0);
+
   Request q;
   q.headers["type"] = "edit";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
+
   ASSERT_EQ(r.headers["type"], "edit");
 }
 
-TEST(LoginControllerTest, test1) {
-  server::CreateController c;
+class LoginControllerTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::EditControllerCreator c;
+};
+
+TEST_F(LoginControllerTest, test1) {
+  EXPECT_CALL(*application, loginUser(_)).Times(0);
+
   Request q;
   q.headers["type"] = "login";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "login");
 }
 
-TEST(LogoutControllerTest, test1) {
-  server::CreateController c;
+class LogoutControllerTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::LogoutControllerCreator c;
+};
+
+TEST_F(LogoutControllerTest, test1) {
+  EXPECT_CALL(*application, logoutUser(_)).Times(0);
+
   Request q;
   q.headers["type"] = "logout";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "logout");
 }
 
-TEST(RegistrationControllerTest, test1) {
-  server::CreateController c;
+class RegistrationController : public ::testing::Test {
+protected:
+  void SetUp() override {
+    controller = c.createController();
+    application = make_shared<MockServerApplication>();
+  }
+
+  shared_ptr<server::Controller> controller;
+  shared_ptr<MockServerApplication> application;
+
+  server::RegistrationControllerCreator c;
+};
+
+TEST_F(RegistrationController, test1) {
+  EXPECT_CALL(*application, registerUser(_)).Times(1);
+
   Request q;
   q.headers["type"] = "register";
-  Reply r = c.handleRequest(q);
+  Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "register");
 }
