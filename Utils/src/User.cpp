@@ -4,6 +4,10 @@ User::User() {
 
 }
 
+User::~User() {
+
+}
+
 void User::setId(int newId) {
 
 }

@@ -4,6 +4,10 @@ ContentChange::ContentChange() {
 
 }
 
+ContentChange::~ContentChange() {
+
+}
+
 ContentChange::ContentChange(std::string str) {
 
 }

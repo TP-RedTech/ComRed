@@ -16,6 +16,8 @@ class User {
  public:
   User();
 
+  ~User();
+
   void setId(int newId);
 
   int getId();

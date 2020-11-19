@@ -8,6 +8,10 @@ Diaposon::Diaposon() {
 
 }
 
+Diaposon::~Diaposon() {
+
+}
+
 size_t Diaposon::getStartPos() {
   return size_t();
 }

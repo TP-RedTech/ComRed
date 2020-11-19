@@ -13,6 +13,8 @@ class Diaposon {
 
   Diaposon(size_t start, size_t end);
 
+  ~Diaposon();
+
   size_t getStartPos();
 
   size_t getEndPos();

@@ -3,8 +3,9 @@
 
 class BaseChange{
  public:
-  BaseChange();
+  BaseChange() = default;
   virtual void applyChanges() = 0;
+  virtual ~BaseChange() = default;
 
 };
 

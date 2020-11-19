@@ -17,13 +17,15 @@ class Document{
  public:
   Document();
 
+  ~Document();
+
   int getId() const;
 
   std::string getText();
 
   void addOwner(int ownerId);
 
-  void updateText(std::vector<Operation> operation);
+  void updateText(Operation operation);
 
   void setId(int newId);
 };
