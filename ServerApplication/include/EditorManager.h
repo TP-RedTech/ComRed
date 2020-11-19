@@ -7,6 +7,8 @@
 #include "Editor.h"
 #include "EditorListener.h"
 
+#include "../../Utils/include/Document.h"
+
 class BaseEditorManager {
 public:
     virtual ~BaseEditorManager() = default;
