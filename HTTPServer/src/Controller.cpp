@@ -1,4 +1,3 @@
 #include "controller/Controller.h"
-http::server::Controller::Controller() {
 
-}
+http::server::Controller::Controller() = default;
