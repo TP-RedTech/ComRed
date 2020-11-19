@@ -29,12 +29,16 @@ install:
 
 before_tests:
   - mkdir build
-  - cd test_build
-  - cmake ../test/
-  - make test
+  - cd build
+  - cmake ..
+  - make
 
 tests:
-  - ./test
+  - ./test_DB
+  - ./gtest
+  - ./test_server
+  - ./server_run_test_tests
+  - ./controllers_test_tests
 
 after_tests:
   - make clean
