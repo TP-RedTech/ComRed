@@ -5,12 +5,12 @@
 #include "requests/Reply.h"
 #include "Controller.h"
 
-namespace http::server {
+namespace http { namespace server {
 class DeleteController : public Controller {
 public:
   DeleteController();
   Reply handleRequest(const Request &request) override;
 };
-}
+} }
 
 #endif

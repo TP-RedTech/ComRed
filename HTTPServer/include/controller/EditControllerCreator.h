@@ -3,12 +3,12 @@
 
 #include "ControllerCreator.h"
 
-namespace http::server {
+namespace http { namespace server {
 class EditControllerCreator : public ControllerCreator {
 public:
   EditControllerCreator();
   std::shared_ptr<Controller> createController();
 };
-}
+} }
 
 #endif
