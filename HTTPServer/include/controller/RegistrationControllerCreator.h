@@ -3,12 +3,12 @@
 
 #include "ControllerCreator.h"
 
-namespace http::server {
+namespace http { namespace server {
 class RegistrationControllerCreator : public ControllerCreator {
 public:
   RegistrationControllerCreator();
   std::shared_ptr<Controller> createController() override;
 };
-}
+} }
 
 #endif

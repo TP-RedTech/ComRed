@@ -6,12 +6,12 @@
 #include "Controller.h"
 #include <memory>
 
-namespace http::server {
+namespace http { namespace server {
 class ControllerCreator {
 public:
   ControllerCreator();
   virtual std::shared_ptr<Controller> createController() = 0;
 };
-}
+} }
 
 #endif //COMREDSERVER_BASECONTROLLER_H
