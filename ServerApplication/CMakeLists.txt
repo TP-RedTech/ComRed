@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
-project(untitled)
+cmake_minimum_required(VERSION 3.5)
+project(ServerApplication)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -19,6 +19,7 @@ file(GLOB test_source
         )
 
 add_library(ServerApplication STATIC ${sources} src/Editor.cpp include/EditorManagerDelegate.h include/EditorListener.h)
+target_include_directories(ServerApplication PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 add_executable(test_server ${test_source})
 target_link_libraries(test_server  ServerApplication ${GTEST_LIBRARIES})

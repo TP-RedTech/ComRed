@@ -11,7 +11,7 @@ using namespace std;
 class DocumentRepositoryI
 {
 public:
-    DocumentRepositoryI();
+    DocumentRepositoryI() = default;
     virtual ~DocumentRepositoryI() = default;
     virtual void createTest(Document& d) = 0;
     virtual void changeTest(Document& d) = 0;
@@ -36,7 +36,7 @@ public:
 
     virtual void createTest(Document& d) { createDoc(d); }
     virtual void changeTest(Document& d) { changeDoc(d); }
-    virtual void deleteTest(Document& d) { deleteDoc(d): }
+    virtual void deleteTest(Document& d) { deleteDoc(d); }
     virtual Document getIdTest(int id) { return getById(id); }
     virtual Document getUserTest(User& u) { return getByUser(u); }
     virtual void addUserTest(User& u, Document& d) { addUser(u, d); }
