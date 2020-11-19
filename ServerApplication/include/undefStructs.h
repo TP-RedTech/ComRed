@@ -1,11 +1,8 @@
 #ifndef UNTITLED_UNDEFSTRUCTS_H
 #define UNTITLED_UNDEFSTRUCTS_H
 
-struct Operation{};
-
-struct Document{
-    Document() = default;
-};
+#include "../../Utils/include/Operation.h"
+#include "../../Utils/include/Document.h"
 
 struct DocumentRepository {
 

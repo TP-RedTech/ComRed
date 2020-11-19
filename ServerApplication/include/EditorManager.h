@@ -19,6 +19,7 @@ public:
 
 class EditorManager: public BaseEditorManager, public EditorManagerDelegate {
 public:
+    EditorManager();
     EditorManager(Document document): BaseEditorManager() {
         this->document = document;
     }
