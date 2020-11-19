@@ -12,7 +12,7 @@
 class BaseEditor {
 public:
     virtual ~BaseEditor() = default;
-    virtual Operation submitToServer(Operation oepration) = 0;
+    virtual Operation submitToServer(Operation operation) = 0;
     virtual Operation makeNewOperation() = 0;
     virtual void changeDocument(Operation operation) = 0;
 };
