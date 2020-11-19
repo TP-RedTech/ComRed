@@ -8,6 +8,9 @@
 
 #include "EditorListener.h"
 
+#include "../../Utils/include/Operation.h"
+#include "../../Utils/include/Document.h"
+
 
 class BaseEditor {
 public:

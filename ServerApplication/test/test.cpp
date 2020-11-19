@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <vector>
 #include "gmock/gmock.h"
 
 #include "../include/ServerApplication.h"
@@ -10,6 +9,9 @@ using ::testing::AtLeast;
 using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
+
+bool operator ==(const Operation &op1, const Operation &op2) { return true; }
+bool operator ==(const Document &doc1, const Document &doc2) { return true; }
 
 class MockServerApplication: public BaseServerApplication {
 public:
@@ -27,12 +29,12 @@ public:
 
 class MockEditorManager: public BaseEditorManager, public EditorManagerDelegate {
 public:
+    MockEditorManager() = default;
     MOCK_METHOD1(changeOperationRelativelyOthers, Operation(Operation));
     MOCK_METHOD1(addOperationToLog, void(Operation));
     MOCK_METHOD1(changeServerDocument, void(Document));
     MOCK_METHOD1(sendOperationToClient, void(Operation));
     MOCK_METHOD1(sendAnswerToOriginalClient, void(Operation));
-
 
     // Delegate Method
     MOCK_METHOD1(addOperationToQueue, void(Operation));
@@ -52,11 +54,6 @@ public:
     MOCK_METHOD0(hearSubmitFromServer, void());
 
 private:
-    int syncRevision;
-    Operation sendedOperation;
-    std::vector<Operation> waitingForSendOperation;
-    Document document;
-    std::weak_ptr<EditorManagerDelegate> editorManager;
 };
 
 class MockSession: public BaseSession {
@@ -66,39 +63,30 @@ public:
     MOCK_METHOD0(sendToServerBufOfhanger, std::vector<Operation>());
 
 private:
-    EditorManager editorManager;
-    std::vector<Editor> editors;
-    std::vector<Operation> bufferOfChanges;
 };
 
-class MockOperation : public Operation {
-public:
-    MOCK_METHOD0(getRevision, int());
-    MOCK_METHOD0(getLengthBeforeOperation, int());
-    MOCK_METHOD0(getLengthAfterOperation, int());
-    MOCK_METHOD0(getIdEditor, int());
-    MOCK_METHOD0(getChanges, std::vector<std::shared_ptr<BaseChange>>());
-};
+TEST(ApplicationServer, readDocument) {
+    MockServerApplication *mockServerApplication = new MockServerApplication;
+    Document document;
+    EXPECT_CALL(*mockServerApplication, readDocument()).Times(AtLeast(1));
+    mockServerApplication->readDocument();
+    delete mockServerApplication;
+}
 
+TEST(EditorManager, changeServerDocument) {
+    MockEditorManager *mockEditorManager = new MockEditorManager;
+    Document document;
+    EXPECT_CALL(*mockEditorManager, changeServerDocument(document)).Times(AtLeast(1));
+    mockEditorManager->changeServerDocument(document);
+    delete mockEditorManager;
+}
 
-TEST(Document, testUpdateText) {
-    MockServerApplication mockServerApplication;
-    MockEditorManager mockEditorManager;
-    MockEditor mockEditor;
-    MockSession mockSession;
-
-    MockOperation opr;
-    std::string str;
-
-    EXPECT_CALL(mockServerApplication, createDocument()).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, updateDocument(opr)).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, deleteDocument()).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, readDocument()).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, connectDocument(0, 0)).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, loginUser()).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, registerUser(str)).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, logoutUser()).Times(AtLeast(2));
-    EXPECT_CALL(mockServerApplication, updateUser()).Times(AtLeast(2));
+TEST(MockEditor, changeServerDocument) {
+    MockEditor *mockEditor = new MockEditor;
+    Document document;
+    EXPECT_CALL(*mockEditor, hearChangesFromServer()).Times(AtLeast(1));
+    mockEditor->hearChangesFromServer();
+    delete mockEditor;
 }
 
 int main(int argc, char** argv) {

@@ -20,6 +20,6 @@ file(GLOB test_source
 
 add_library(ServerApplication STATIC ${sources} src/Editor.cpp include/EditorManagerDelegate.h include/EditorListener.h)
 
-add_executable(gtest ${test_source})
-target_link_libraries(gtest  ServerApplication ${GTEST_LIBRARIES})
-target_link_libraries(gtest -lgmock pthread)
+add_executable(test_server ${test_source})
+target_link_libraries(test_server  ServerApplication ${GTEST_LIBRARIES})
+target_link_libraries(test_server -lgmock pthread)

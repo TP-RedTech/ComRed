@@ -5,6 +5,5 @@
 #include "string"
 #include "queue"
 #include "memory"
-#include "undefStructs.h"
 
 #endif //UNTITLED_SERVERHEADER_H
