@@ -3,8 +3,8 @@ project(ComRedServer)
 
 set(CMAKE_CXX_STANDARD 14)
 
-#include(configure_gtest.cmake)
-add_subdirectory(test)
+include(configure_gtest.cmake)
+#add_subdirectory(test)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
