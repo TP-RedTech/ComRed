@@ -15,16 +15,17 @@ bool operator ==(const Document &doc1, const Document &doc2) { return true; }
 
 class MockServerApplication: public BaseServerApplication {
 public:
-    MOCK_METHOD0(createDocument, int());
-    MOCK_METHOD1(updateDocument, std::vector<Operation>(Operation));
-    MOCK_METHOD1(deleteDocument, std::vector<Operation>(Operation));
-    MOCK_METHOD0(deleteDocument, void());
-    MOCK_METHOD0(readDocument, void());
-    MOCK_METHOD2(connectDocument, std::string(int, int));
-    MOCK_METHOD0(loginUser, std::string());
+    MockServerApplication() = default;
+    ~MockServerApplication() {}
+    MOCK_METHOD2(createDocument, int(std::string, std::string));
+    MOCK_METHOD3(updateDocument, std::vector<std::string>(std::string, int, std::vector<std::string>));
+    MOCK_METHOD2(deleteDocument, void(std::string, int));
+    MOCK_METHOD2(readDocument, std::string(std::string, int));
+    MOCK_METHOD2(connectDocument, std::string(std::string, int));
+    MOCK_METHOD1(loginUser, std::string(std::string));
     MOCK_METHOD1(registerUser, std::string(std::string));
-    MOCK_METHOD0(logoutUser, std::string());
-    MOCK_METHOD0(updateUser, std::string());
+    MOCK_METHOD1(logoutUser, std::string(std::string));
+    MOCK_METHOD2(updateUser, std::string(std::string, std::string));
 };
 
 class MockEditorManager: public BaseEditorManager, public EditorManagerDelegate {
@@ -66,10 +67,11 @@ private:
 };
 
 TEST(ApplicationServer, readDocument) {
-    MockServerApplication *mockServerApplication = new MockServerApplication;
+    MockServerApplication *mockServerApplication = new MockServerApplication();
     Document document;
-    EXPECT_CALL(*mockServerApplication, readDocument()).Times(AtLeast(1));
-    mockServerApplication->readDocument();
+
+    EXPECT_CALL(*mockServerApplication, readDocument(std::string(), 0)).Times(AtLeast(1));
+    mockServerApplication->readDocument(std::string(), 0);
     delete mockServerApplication;
 }
 
