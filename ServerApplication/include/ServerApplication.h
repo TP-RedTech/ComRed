@@ -3,6 +3,8 @@
 
 #include "ServerHeader.h"
 #include "Session.h"
+#include "../../DB/include/DocumentRepository.h"
+#include "../../DB/include/UserRepository.h"
 
 class BaseServerApplication {
 public:
@@ -34,7 +36,7 @@ public:
 
 private:
     std::unique_ptr<std::vector<Session>> sessions;
-    std::shared_ptr<DocumentRepository> documentManager;
+    std::shared_ptr<DocumentRepositoryI> documentManager;
     std::shared_ptr<UserRepository> userManager;
 };
 
