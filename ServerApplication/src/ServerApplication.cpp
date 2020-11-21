@@ -1,37 +1,41 @@
 #include "ServerApplication.h"
 
-int ServerApplication::createDocument() {
+ServerApplication::~ServerApplication() {
+
+}
+
+int ServerApplication::createDocument(std::string userData, std::string documentName) {
     return 0;
 }
 
-std::vector<Operation> ServerApplication::updateDocument(Operation operation) {
-    return std::vector<Operation>();
+std::vector<std::string> ServerApplication::updateDocument(std::string userData, int docId, std::vector<std::string> operations) {
+    return std::vector<std::string>();
 }
 
-void ServerApplication::deleteDocument() {
-
-}
-
-void ServerApplication::readDocument() {
+void ServerApplication::deleteDocument(std::string userData, int docId) {
 
 }
 
-std::string ServerApplication::connectDocument(int idUser, int idDocument) {
-    return "";
+std::string ServerApplication::readDocument(std::string userData, int docId) {
+    return std::string();
 }
 
-std::string ServerApplication::loginUser() {
-    return "";
+std::string ServerApplication::connectDocument(std::string userData, int docId) {
+    return std::string();
 }
 
-std::string ServerApplication::registerUser(std::string data) {
-    return "";
+std::string ServerApplication::loginUser(std::string userData) {
+    return std::string();
 }
 
-std::string ServerApplication::logoutUser() {
-    return "";
+std::string ServerApplication::registerUser(std::string userData) {
+    return std::string();
 }
 
-std::string ServerApplication::updateUser() {
-    return "";
+std::string ServerApplication::logoutUser(std::string userData) {
+    return std::string();
+}
+
+std::string ServerApplication::updateUser(std::string userData, std::string newUserData) {
+    return std::string();
 }

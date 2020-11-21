@@ -10,29 +10,30 @@ class BaseServerApplication {
 public:
     BaseServerApplication() = default;
     virtual ~BaseServerApplication() = default;
-    virtual int createDocument() = 0;
-    virtual std::vector<Operation> updateDocument(Operation operation) = 0;
-    virtual void deleteDocument() = 0;
-    virtual void readDocument() = 0;
-    virtual std::string connectDocument(int idUser, int idDocument) = 0;
-    virtual std::string loginUser() = 0;
-    virtual std::string registerUser(std::string data) = 0;
-    virtual std::string logoutUser() = 0;
-    virtual std::string updateUser() = 0;
+    virtual int createDocument(std::string userData, std::string documentName) = 0;
+    virtual std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) = 0;
+    virtual void deleteDocument(std::string userData, int docId) = 0;
+    virtual std::string readDocument(std::string userData, int docId) = 0;
+    virtual std::string connectDocument(std::string userData, int docId) = 0;
+    virtual std::string loginUser(std::string userData) = 0;
+    virtual std::string registerUser(std::string userData) = 0;
+    virtual std::string logoutUser(std::string userData) = 0;
+    virtual std::string updateUser(std::string userData, std::string newUserData) = 0;
 };
 
 class ServerApplication: public BaseServerApplication {
 public:
     ServerApplication() = default;
-    int createDocument() override;
-    std::vector<Operation> updateDocument(Operation operation) override;
-    void deleteDocument() override;
-    void readDocument() override;
-    std::string connectDocument(int idUser, int idDocument) override;
-    std::string loginUser() override;
-    std::string registerUser(std::string data) override;
-    std::string logoutUser() override;
-    std::string updateUser() override;
+    ~ServerApplication() override;
+    int createDocument(std::string userData, std::string documentName) override;
+    std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) override;
+    void deleteDocument(std::string userData, int docId) override;
+    std::string readDocument(std::string userData, int docId) override;
+    std::string connectDocument(std::string userData, int docId) override;
+    std::string loginUser(std::string userData) override;
+    std::string registerUser(std::string userData) override;
+    std::string logoutUser(std::string userData) override;
+    std::string updateUser(std::string userData, std::string newUserData) override;
 
 private:
     std::unique_ptr<std::vector<Session>> sessions;
