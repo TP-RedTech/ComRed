@@ -41,6 +41,6 @@ void User::deleteDocument(int id) {
 }
 
 Document User::getDocumentById(int id) {
-  return Document();
+  return Document(id, "");
 }
 

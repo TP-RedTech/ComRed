@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "BaseChange.h"
 #include "Operation.h"
@@ -15,9 +16,19 @@ class Document{
   std::string text;
 
  public:
-  Document();
+  Document(int idDocument,
+           const std::string& textDocument): id(idDocument),
+           password(std::string()),
+           ownersId(0),
+           text{textDocument} { };
 
-  ~Document();
+  Document(int idDocument, std::string&& textDocument):
+           id(idDocument),
+           password(std::string()),
+           ownersId(0),
+           text{std::move(textDocument)} { };
+
+  ~Document() = default;
 
   int getId() const;
 
