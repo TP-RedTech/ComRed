@@ -274,3 +274,8 @@ TEST_F(RegistrationController, test1) {
   Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "register");
 }
+
+//int main(int argc, char **argv) {
+//  ::testing::InitGoogleTest(&argc, argv);
+//  return RUN_ALL_TESTS();
+//}
