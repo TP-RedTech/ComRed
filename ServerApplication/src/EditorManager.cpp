@@ -1,9 +1,5 @@
 #include "EditorManager.h"
 
-EditorManager::EditorManager() {
-
-}
-
 Operation EditorManager::changeOperationRelativelyOthers(Operation operation) {
     return Operation();
 }

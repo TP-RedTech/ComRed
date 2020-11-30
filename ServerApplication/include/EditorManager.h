@@ -3,11 +3,8 @@
 
 #include "ServerHeader.h"
 
-#include "EditorManagerDelegate.h"
-#include "Editor.h"
-#include "EditorListener.h"
-
 #include "../../Utils/include/Document.h"
+#include "../../Utils/include/Operation.h"
 
 class BaseEditorManager {
 public:
@@ -17,13 +14,16 @@ public:
     virtual void changeServerDocument(Document document) = 0;
     virtual void sendOperationToClient(Operation operation) = 0;
     virtual void sendAnswerToOriginalClient(Operation operation) = 0;
+    virtual void addOperationToQueue(Operation operation) = 0;
 };
 
-class EditorManager: public BaseEditorManager, public EditorManagerDelegate {
+class EditorManager: public BaseEditorManager {
 public:
-    EditorManager();
-    EditorManager(Document document): BaseEditorManager() {
-        this->document = document;
+    // EditorManger() = default;
+    EditorManager(Document document): document(document), logRevision(0), waitingForProcessing() {
+        std::cout << document.getId() << std::endl;
+        document.addOwner(1);
+        std::cout << document.getId() << std::endl;
     }
     Operation changeOperationRelativelyOthers(Operation operation) override;
     void addOperationToLog(Operation operation) override;
@@ -37,7 +37,6 @@ public:
 private:
     Document document;
     std::vector<Operation> logRevision;
-    std::vector<EditorListener> editors;
     std::queue<Operation> waitingForProcessing;
 };
 

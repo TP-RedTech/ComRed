@@ -1,7 +1,6 @@
 #ifndef UNTITLED_SERVERAPPLICATION_H
 #define UNTITLED_SERVERAPPLICATION_H
 
-#include "ServerHeader.h"
 #include "Session.h"
 #include "../../DB/include/DocumentRepository.h"
 #include "../../DB/include/UserRepository.h"
@@ -23,8 +22,13 @@ public:
 
 class ServerApplication: public BaseServerApplication {
 public:
-    ServerApplication() = default;
-    ~ServerApplication() override;
+    ServerApplication() {
+        sessions = std::unique_ptr<std::vector<Session>>(new std::vector<Session>());
+    }
+
+    ~ServerApplication() {
+    }
+
     int createDocument(std::string userData, std::string documentName) override;
     std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) override;
     void deleteDocument(std::string userData, int docId) override;
@@ -37,8 +41,6 @@ public:
 
 private:
     std::unique_ptr<std::vector<Session>> sessions;
-    std::shared_ptr<DocumentRepositoryI> documentManager;
-    std::shared_ptr<UserRepository> userManager;
 };
 
 
