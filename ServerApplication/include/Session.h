@@ -6,20 +6,29 @@
 class BaseSession {
 public:
     virtual ~BaseSession() = default;
-    virtual void manageOperation(Operation operation) = 0;
+    virtual void manageOperation(int idEditor, Operation operation) = 0;
     virtual std::vector<Operation> sendToServerBufOfhanger() = 0;
+    virtual void addEditor(int idEditor) = 0;
 };
 
 class Session: public BaseSession {
 public:
     Session(const Session&) = delete;
-    Session(Session&&) = default;
-    Session(EditorManager& editorManager): editorManager(editorManager), editors(0), bufferOfChanges(0) {}
-    void manageOperation(Operation operation) override;
+    Session(Session&&) = delete;
+    Session(std::unique_ptr<EditorManager> editorManager): editorManager{editorManager.release()}, editors(0), bufferOfChanges(0)
+    {
+        std::cout << "Session created\n";
+    }
+    ~Session() {
+        std::cout << "Session destructed\n";
+    }
+
+    void manageOperation(int idEditor, Operation operation) override;
     std::vector<Operation> sendToServerBufOfhanger() override;
+    void addEditor(int idEditor) override;
 
 private:
-    EditorManager editorManager;
+    std::shared_ptr<EditorManager> editorManager;
     std::vector<Editor> editors;
     std::vector<Operation> bufferOfChanges;
 };

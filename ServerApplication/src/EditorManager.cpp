@@ -10,7 +10,6 @@ void EditorManager::addOperationToLog(Operation operation) {
 }
 
 void EditorManager::changeServerDocument(Document document) {
-
 }
 
 void EditorManager::sendOperationToClient(Operation operation) {
@@ -23,4 +22,12 @@ void EditorManager::sendAnswerToOriginalClient(Operation operation) {
 
 void EditorManager::addOperationToQueue(Operation operation)  {
 
+}
+
+Document EditorManager::getCurrentDocumentVersion() {
+    return document;
+}
+
+int EditorManager::getLastRevision() {
+    return 0;
 }

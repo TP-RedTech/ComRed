@@ -6,18 +6,12 @@ void Document::setId(int newId) {
     }
 }
 
-//int Document::getId() const {
-//    return id;
-//}
+int Document::getId() const {
+    return id;
+}
 
 std::string Document::getText() {
     return text;
-}
-
-void Document::addOwner(int ownerId) {
-    if (ownerId >= 0) {
-        ownersId.push_back(ownerId);
-    }
 }
 
 void Document::updateText(Operation operation) {

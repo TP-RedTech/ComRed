@@ -20,3 +20,7 @@ void Editor::hearChangesFromServer() {
 void Editor::hearSubmitFromServer() {
 
 }
+
+int Editor::getId() {
+    return id;
+}
