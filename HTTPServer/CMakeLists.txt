@@ -4,7 +4,6 @@ project(ComRedServer)
 set(CMAKE_CXX_STANDARD 14)
 
 include(configure_gtest.cmake)
-#add_subdirectory(test)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
@@ -15,4 +14,9 @@ file(GLOB sources
         "${PROJECT_SOURCE_DIR}/include/requests/*.h"
         "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
+find_package(Boost 1.60 REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_executable(ComRedServer ${sources})
+
+target_link_libraries(ComRedServer)

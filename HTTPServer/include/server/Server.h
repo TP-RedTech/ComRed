@@ -2,6 +2,7 @@
 #define COMREDSERVER_SERVER_H
 
 #include <string>
+#include <boost/asio.hpp>
 
 namespace http { namespace server {
 class Server {
