@@ -10,27 +10,36 @@
 
 class Document{
 public:
-    Document() = default;
+    Document() {}
     Document(int idDocument,
              const std::string& textDocument): id(idDocument),
                                                password(std::string()),
-                                               text{textDocument} { };
+                                               text{textDocument} {
+        std::cout << "Document" << id << " manager has been constructed" << std::endl;
+    };
 
     Document(int idDocument, std::string&& textDocument):
             id(idDocument),
             password(std::string()),
-            text{std::move(textDocument)} { };
+            text{std::move(textDocument)} {
+        std::cout << "Document" << id << " manager has been constructed" << std::endl;
+    };
 
     Document(const Document &document): id(document.id), password(document.password), text(document.text)
-    // Примечание: Мы имеем прямой доступ к членам объекта drob, поскольку мы сейчас находимся внутри класса Drob
     {
-        std::cout << "New document via constructer created\n";
-        std::cout << "id = " << this->id << std::endl;
-        std::cout << "text = " << this->text << std::endl;
+        std::cout << "Document" << id << " manager has been constructed" << std::endl;
 
     }
 
-    ~Document() = default;
+    Document(std::shared_ptr<Document> document): id(document->id), password(document->password), text(document->text)
+    {
+        std::cout << "Document" << id << " manager has been constructed" << std::endl;
+
+    }
+
+    ~Document() {
+        std::cout << "Document" << id << " manager has been destructed" << std::endl;
+    }
 
     int getId() const;
 
@@ -42,8 +51,9 @@ public:
 
 private:
     int id;
-    std::string password;
     std::string text;
+    std::string password;
+
 };
 
 #endif //UTILS_INCLUDE_DOCUMENT_H_

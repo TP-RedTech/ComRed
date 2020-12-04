@@ -24,10 +24,10 @@ void EditorManager::addOperationToQueue(Operation operation)  {
 
 }
 
-Document EditorManager::getCurrentDocumentVersion() {
-    return document;
-}
-
 int EditorManager::getLastRevision() {
     return 0;
+}
+
+std::shared_ptr<Document> EditorManager::getCurrentVersionOfDocument() {
+    return std::make_shared<Document>(document);
 }

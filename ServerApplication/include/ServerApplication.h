@@ -1,6 +1,7 @@
 #ifndef UNTITLED_SERVERAPPLICATION_H
 #define UNTITLED_SERVERAPPLICATION_H
 
+#include "ServerHeader.h"
 #include "Session.h"
 #include "../../DB/include/DocumentRepository.h"
 #include "../../DB/include/UserRepository.h"
@@ -23,7 +24,7 @@ public:
 class ServerApplication: public BaseServerApplication {
 public:
     ServerApplication() {
-        sessions = std::unique_ptr<std::vector<Session>>(new std::vector<Session>());
+        sessions = std::unique_ptr<std::vector<std::shared_ptr<Session>>>();
     }
 
     ~ServerApplication() {
@@ -40,7 +41,9 @@ public:
     std::string updateUser(std::string userData, std::string newUserData) override;
 
 private:
-    std::unique_ptr<std::vector<Session>> sessions;
+    std::unique_ptr<std::vector<std::shared_ptr<Session>>> sessions;
+
+    void addSession(std::shared_ptr<Session> session);
 };
 
 

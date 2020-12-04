@@ -12,11 +12,16 @@ std::vector<Operation> Session::sendToServerBufOfhanger() {
 
 void Session::addEditor(int idEditor) {
     for (int i = 0; i < editors.size(); i++) {
-        if (editors[i].getId() == idEditor) {
+        if (editors[i]->getId() == idEditor) {
             return;
         }
     }
-    Editor newEditor(idEditor, editorManager);
-    editors.push_back(newEditor);
-    std::cout<< "added editor with id: " << editors.back().getId() << std::endl;
+    std::unique_ptr<Editor> newEditor(new Editor(idEditor, editorManager));
+    editors.push_back(std::move(newEditor));
+    std::cout<< "added editor with id: " << editors.back()->getId() << std::endl;
+}
+
+
+int Session::getIdDocument() {
+    return idDocument;
 }
