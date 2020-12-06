@@ -6,8 +6,9 @@
 
 namespace http{
 class RequestParser {
-  RequestParser();
   Request parseRequest(const std::string &requestString);
+public:
+  RequestParser();
 };
 }
 
