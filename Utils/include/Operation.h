@@ -3,46 +3,45 @@
 
 #include <iostream>
 #include <vector>
+#include "Change.h"
 
-#include "BaseChange.h"
-
-class Operation{
+class Operation {
  private:
-  int revision;
-  int idEditor;
-  size_t lengthBeforeOperation;
-  size_t lengthAfterOperation;
-  std::vector<std::shared_ptr<BaseChange>> changes;
+  size_t lenBeforeOperation;
+  size_t lenAfterOperation;
+  std::vector<Change> ops;
 
  public:
+
+  size_t getLenBeforeOperation() const;
+
+  size_t getLenAfterOperation() const;
+
+  void setLenBeforeOperation(const size_t& len);
+
+  void setLenAfterOperation(const size_t& len);
+
+  void addOperation(const Change& change);
+
+  std::vector<Change> getChanges() const;
+
   Operation();
 
-  ~Operation();
+  // skip characters
+  void retain(int newNumber);
 
-  void setRevision(int newRevision);
+  // insert a new string at the current position
+  void insert(const std::string& newString);
 
-  int getRevision() const;
+  void erase(int newNumber);
 
-  void setIdEditor(int newId);
+  bool isNoEffect() const;
 
-  int getIdEditor() const;
+  std::string applyToString(const std::string& anotherString) const;
 
-  void setLengthBeforeOperation(size_t newLength);
+  Operation compose (const Operation& operation2);
 
-  void setLengthAfterOperation(size_t newLength);
-
-  size_t getLengthBeforeOperation() const;
-
-  size_t getLengthAfterOperation() const;
-
-  size_t getSizeOfChanges() const;
-
-  void addChange(std::shared_ptr<BaseChange> newChange);
-
-  std::vector<std::shared_ptr<BaseChange>> getChanges();
-
-  Operation mergeOperations(Operation anotherOperation);
-
+  std::vector<Operation> transform(const Operation& secondOp);
 };
 
 #endif //UTILS_INCLUDE_OPERATION_H_
