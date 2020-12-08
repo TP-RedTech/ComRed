@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-project(ComRedServer)
+project(ComRed)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include(configure_gtest.cmake)
+#include(configure_gtest.cmake)
 #add_subdirectory(test)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
