@@ -33,14 +33,19 @@ class Operation {
   // insert a new string at the current position
   void insert(const std::string& newString);
 
+  //delete characters
   void erase(int newNumber);
 
   bool isNoEffect() const;
 
   std::string applyToString(const std::string& anotherString) const;
 
+  //for every string and pair of ops A, B must hold
+  //apply(apply(S, A), B) = apply(S, compose(A, B))
   Operation compose (const Operation& operation2);
 
+  //Transform takes two operations A and B that happened concurrently and
+  // produces two operations A' and B' (in an array)
   std::vector<Operation> transform(const Operation& secondOp);
 };
 
