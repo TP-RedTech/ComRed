@@ -27,7 +27,6 @@ std::vector<Change> Operation::getChanges() const {
 Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0){
 }
 
-// skip characters
 void Operation::retain(int newNumber) {
   if (newNumber <= 0) {
     return;
@@ -45,7 +44,6 @@ void Operation::retain(int newNumber) {
   }
 }
 
-// insert a new string at the current position
 void Operation::insert(const std::string& newString) {
   if (newString.empty()) {
     return;
@@ -216,7 +214,7 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
   Change op1 = ops[idx1++];
   Change op2 = secondOp.getChanges()[idx2++];
   while (true) {
-    if (idx1 > ops.size() || idx2 > secondOp.getChanges().size()) {
+    if (idx1 > ops.size() && idx2 > secondOp.getChanges().size()) {
       break;
     }
 
@@ -232,7 +230,7 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
       op2 = secondOp.getChanges()[idx2++];
     }
 
-    if (idx1 > ops.size() || idx2 > secondOp.getChanges().size()) {
+    if (idx1 > ops.size() && idx2 > secondOp.getChanges().size()) {
       break;
     }
 
