@@ -1,4 +1,5 @@
 #include "EditorManager.h"
+#include "Editor.h"
 
 Operation EditorManager::changeOperationRelativelyOthers(Operation operation) {
     return Operation();
@@ -30,4 +31,9 @@ int EditorManager::getLastRevision() {
 
 std::shared_ptr<Document> EditorManager::getCurrentVersionOfDocument() {
     return std::make_shared<Document>(document);
+}
+
+void EditorManager::addEeditor(const std::shared_ptr<Editor>& editor) {
+    std::weak_ptr<Editor> weakEditor(editor);
+    editors.push_back(weakEditor);
 }

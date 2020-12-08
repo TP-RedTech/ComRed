@@ -35,7 +35,7 @@ public:
 private:
     int idDocument;
     std::shared_ptr<EditorManager> editorManager;
-    std::vector<std::unique_ptr<Editor>> editors;
+    std::vector<std::shared_ptr<Editor>> editors;
     std::vector<Operation> bufferOfChanges;
 };
 

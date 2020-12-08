@@ -6,6 +6,8 @@
 #include "../../Utils/include/Document.h"
 #include "../../Utils/include/Operation.h"
 
+class Editor;
+
 class BaseEditorManager {
 public:
     virtual ~BaseEditorManager() = default;
@@ -20,11 +22,12 @@ public:
 
 class EditorManager: public BaseEditorManager {
 public:
-    EditorManager(std::shared_ptr<Document> document): document(std::make_shared<Document>(document)), logRevision(0), waitingForProcessing() {
+    EditorManager(std::shared_ptr<Document> document): document(std::make_shared<Document>(document)), logRevision(0),
+                                                       waitingForProcessing(), editors(0) {
         std::cout << "EditorManager" << document->getId() << " manager has been constructed" << std::endl;
     }
 
-    EditorManager(std::shared_ptr<EditorManager> editorManager): document(editorManager->document), logRevision(editorManager->logRevision), waitingForProcessing(editorManager->waitingForProcessing)
+    EditorManager(std::shared_ptr<EditorManager> editorManager): document(editorManager->document), logRevision(editorManager->logRevision), waitingForProcessing(editorManager->waitingForProcessing), editors(0)
     {
         std::cout << "EditorManager" << document->getId() << " manager has been constructed" << std::endl;
 
@@ -47,11 +50,13 @@ public:
 
     int getLastRevision() override;
     std::shared_ptr<Document> getCurrentVersionOfDocument();
+    void addEeditor(const std::shared_ptr<Editor>& editor);
 
 private:
     std::shared_ptr<Document> document;
     std::vector<Operation> logRevision;
     std::queue<Operation> waitingForProcessing;
+    std::vector<std::weak_ptr<Editor>> editors;
 };
 
 #endif //UNTITLED_EDITORMANAGER_H

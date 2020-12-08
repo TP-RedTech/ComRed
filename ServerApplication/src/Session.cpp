@@ -16,8 +16,9 @@ void Session::addEditor(int idEditor) {
             return;
         }
     }
-    std::unique_ptr<Editor> newEditor(new Editor(idEditor, editorManager));
-    editors.push_back(std::move(newEditor));
+    std::shared_ptr<Editor> newEditor(new Editor(idEditor, editorManager));
+    editors.push_back(newEditor);
+    editorManager->addEeditor(newEditor);
     std::cout<< "added editor with id: " << editors.back()->getId() << std::endl;
 }
 
