@@ -6,6 +6,8 @@
 
 #include <memory>
 #include <iostream>
+#include <vector>
+#include <thread>
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -14,94 +16,47 @@ using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 namespace server {
 
-// Return a reasonable mime type based on the extension of a file.
-beast::string_view
-mime_type(beast::string_view path) {
-  using beast::iequals;
-  auto const ext = [&path] {
-    auto const pos = path.rfind(".");
-    if (pos == beast::string_view::npos)
-      return beast::string_view{};
-    return path.substr(pos);
-  }();
-  if (iequals(ext, ".htm"))
-    return "text/html";
-  if (iequals(ext, ".html"))
-    return "text/html";
-  if (iequals(ext, ".php"))
-    return "text/html";
-  if (iequals(ext, ".css"))
-    return "text/css";
-  if (iequals(ext, ".txt"))
-    return "text/plain";
-  if (iequals(ext, ".js"))
-    return "application/javascript";
-  if (iequals(ext, ".json"))
-    return "application/json";
-  if (iequals(ext, ".xml"))
-    return "application/xml";
-  if (iequals(ext, ".swf"))
-    return "application/x-shockwave-flash";
-  if (iequals(ext, ".flv"))
-    return "video/x-flv";
-  if (iequals(ext, ".png"))
-    return "image/png";
-  if (iequals(ext, ".jpe"))
-    return "image/jpeg";
-  if (iequals(ext, ".jpeg"))
-    return "image/jpeg";
-  if (iequals(ext, ".jpg"))
-    return "image/jpeg";
-  if (iequals(ext, ".gif"))
-    return "image/gif";
-  if (iequals(ext, ".bmp"))
-    return "image/bmp";
-  if (iequals(ext, ".ico"))
-    return "image/vnd.microsoft.icon";
-  if (iequals(ext, ".tiff"))
-    return "image/tiff";
-  if (iequals(ext, ".tif"))
-    return "image/tiff";
-  if (iequals(ext, ".svg"))
-    return "image/svg+xml";
-  if (iequals(ext, ".svgz"))
-    return "image/svg+xml";
-  return "application/text";
-}
+template<class Body, class Allocator, class Send>
+class RequestHandler {
+public:
+  virtual void handle(http::request<Body, http::basic_fields<Allocator>> &&req, Send &&send) = 0;
+};
+
+template<class Body, class Allocator, class Send>
+class ComredRequestHandler {
+public:
+  void handle(http::request<Body, http::basic_fields<Allocator>> &&req, Send &&send) override {
+
+    auto const bad_request =
+        [&req](beast::string_view why) {
+          http::response<http::string_body> res{http::status::bad_request, req.version()};
+          res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+          res.keep_alive(req.keep_alive());
+          res.body() = std::string(why);
+          res.prepare_payload();
+          return res;
+        };
+  }
+};
 
 // This function produces an HTTP response for the given
 // request. The type of the response object depends on the
 // contents of the request, so the interface requires the
 // caller to pass a generic lambda for receiving the response.
-template<
-    class Body, class Allocator,
-    class Send>
-void
-handle_request(
-    http::request<Body, http::basic_fields<Allocator>> &&req,
-    Send &&send) {
+template<class Body, class Allocator, class Send>
+void handle_request(http::request<Body, http::basic_fields<Allocator>> &&req,
+                    Send &&send) {
   // Returns a bad request response
   auto const bad_request =
       [&req](beast::string_view why) {
         http::response<http::string_body> res{http::status::bad_request, req.version()};
         res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(http::field::content_type, "text/html");
         res.keep_alive(req.keep_alive());
         res.body() = std::string(why);
         res.prepare_payload();
         return res;
       };
-
-  // Make sure we can handle the method
-  if (req.method() != http::verb::get &&
-      req.method() != http::verb::head)
-    return send(bad_request("Unknown HTTP-method"));
-
-  // Request path must be absolute and not contain "..".
-  if (req.target().empty() ||
-      req.target()[0] != '/' ||
-      req.target().find("..") != beast::string_view::npos)
-    return send(bad_request("Illegal request-target"));
+  return send(bad_request("Meow meow\n"));
 }
 
 void fail(beast::error_code ec, char const *what) {
@@ -109,61 +64,19 @@ void fail(beast::error_code ec, char const *what) {
 }
 
 // Handles an HTTP server connection
-class session : public std::enable_shared_from_this<session> {
-  // This is the C++11 equivalent of a generic lambda.
-  // The function object is used to send an HTTP message.
-  struct send_lambda {
-    session &self_;
-
-    explicit
-    send_lambda(session &self)
-        : self_(self) {
-    }
-
-    template<bool isRequest, class Body, class Fields>
-    void
-    operator()(http::message<isRequest, Body, Fields> &&msg) const {
-      // The lifetime of the message has to extend
-      // for the duration of the async operation so
-      // we use a shared_ptr to manage it.
-      auto sp = std::make_shared<
-          http::message<isRequest, Body, Fields>>(std::move(msg));
-
-      // Store a type-erased version of the shared
-      // pointer in the class to keep it alive.
-      self_.res_ = sp;
-
-      // Write the response
-      http::async_write(
-          self_.stream_,
-          *sp,
-          beast::bind_front_handler(
-              &session::on_write,
-              self_.shared_from_this(),
-              sp->need_eof()));
-    }
-  };
-
-  beast::tcp_stream stream_;
-  beast::flat_buffer buffer_;
-  http::request<http::string_body> req_;
-  std::shared_ptr<void> res_;
-  send_lambda lambda_;
-
+class Session : public std::enable_shared_from_this<Session> {
 public:
   // Take ownership of the stream
-  explicit session(tcp::socket &&socket)
+  explicit Session(tcp::socket &&socket)
       : stream_(std::move(socket)), lambda_(*this) {
   }
 
   // Start the asynchronous operation
-  void
-  run() {
+  void run() {
     do_read();
   }
 
-  void
-  do_read() {
+  void do_read() {
     // Make the request empty before reading,
     // otherwise the operation behavior is undefined.
     req_ = {};
@@ -174,14 +87,11 @@ public:
     // Read a request
     http::async_read(stream_, buffer_, req_,
                      beast::bind_front_handler(
-                         &session::on_read,
+                         &Session::on_read,
                          shared_from_this()));
   }
 
-  void
-  on_read(
-      beast::error_code ec,
-      std::size_t bytes_transferred) {
+  void on_read(beast::error_code ec, std::size_t bytes_transferred) {
     boost::ignore_unused(bytes_transferred);
 
     // This means they closed the connection
@@ -195,11 +105,7 @@ public:
     handle_request(std::move(req_), lambda_);
   }
 
-  void
-  on_write(
-      bool close,
-      beast::error_code ec,
-      std::size_t bytes_transferred) {
+  void on_write(bool close, beast::error_code ec, std::size_t bytes_transferred) {
     boost::ignore_unused(bytes_transferred);
 
     if (ec)
@@ -218,23 +124,57 @@ public:
     do_read();
   }
 
-  void
-  do_close() {
+  void do_close() {
     // Send a TCP shutdown
     beast::error_code ec;
     stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
 
     // At this point the connection is closed gracefully
   }
+private:
+  // This is the C++11 equivalent of a generic lambda.
+  // The function object is used to send an HTTP message.
+  struct send_lambda {
+    Session &self_;
+
+    explicit send_lambda(Session &self)
+        : self_(self) {
+    }
+
+    template<bool isRequest, class Body, class Fields>
+    void operator()(http::message<isRequest, Body, Fields> &&msg) const {
+      // The lifetime of the message has to extend
+      // for the duration of the async operation so
+      // we use a shared_ptr to manage it.
+      auto sp = std::make_shared<http::message<isRequest, Body, Fields>>(std::move(msg));
+
+      // Store a type-erased version of the shared
+      // pointer in the class to keep it alive.
+      self_.res_ = sp;
+
+      // Write the response
+      http::async_write(
+          self_.stream_,
+          *sp,
+          beast::bind_front_handler(
+              &Session::on_write,
+              self_.shared_from_this(),
+              sp->need_eof()));
+    }
+  };
+
+  beast::tcp_stream stream_;
+  beast::flat_buffer buffer_;
+  http::request<http::string_body> req_;
+  std::shared_ptr<void> res_;
+  send_lambda lambda_;
+
 };
 
 // Accepts incoming connections and launches the sessions
-class listener : public std::enable_shared_from_this<listener> {
-  net::io_context &ioc_;
-  tcp::acceptor acceptor_;
-
+class Listener : public std::enable_shared_from_this<Listener> {
 public:
-  listener(
+  Listener(
       net::io_context &ioc,
       tcp::endpoint endpoint)
       : ioc_(ioc), acceptor_(net::make_strand(ioc)) {
@@ -271,8 +211,7 @@ public:
   }
 
   // Start accepting incoming connections
-  void
-  run() {
+  void run() {
     do_accept();
   }
 
@@ -282,7 +221,7 @@ private:
     acceptor_.async_accept(
         net::make_strand(ioc_),
         beast::bind_front_handler(
-            &listener::on_accept,
+            &Listener::on_accept,
             shared_from_this()));
   }
 
@@ -290,22 +229,32 @@ private:
     if (ec) {
       fail(ec, "accept");
     } else {
-      // Create the session and run it
-      std::make_shared<session>(
-          std::move(socket))->run();
+      // Create the Session and run it
+      std::make_shared<Session>(std::move(socket))->run();
     }
 
     // Accept another connection
     do_accept();
   }
+
+private:
+  net::io_context &ioc_;
+  tcp::acceptor acceptor_;
 };
 
 Server::Server(const std::string &addr, unsigned short port) : address_(addr), port_(port), context_(1) {
-  auto const address = net::ip::make_address(address_);
-  std::make_shared<listener>(context_, tcp::endpoint{net::ip::make_address(address_), port});
 }
 
 void Server::run() {
+  std::make_shared<Listener>(context_, tcp::endpoint{net::ip::make_address(address_), port_})->run();
+  context_.run();
+//  std::vector<std::thread> v;
+//  v.reserve(threads - 1);
+//  for (size_t i = threads - 1; i > 0; --i) {
+//    v.emplace_back([&ioc] {
+//      ioc.run();
+//    });
+//  }
 }
 
 void Server::setAccept() {
