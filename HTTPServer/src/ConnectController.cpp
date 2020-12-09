@@ -1,7 +1,5 @@
 #include "controller/ConnectController.h"
 
-http::server::ConnectController::ConnectController() = default;
-
-http::Reply http::server::ConnectController::handleRequest(const http::Request &request) {
-  return http::Reply();
+server::Reply server::ConnectController::handleRequest(server::Request request) {
+  return server::Reply();
 }

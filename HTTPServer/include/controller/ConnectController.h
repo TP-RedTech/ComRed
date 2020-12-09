@@ -2,15 +2,13 @@
 #define COMREDSERVER_CONNECTCONTROLLER_H
 
 #include "Controller.h"
-#include "requests/Request.h"
-#include "requests/Reply.h"
 
-namespace http { namespace server {
+namespace server {
 class ConnectController : public Controller {
 public:
-  ConnectController();
-  Reply handleRequest(const Request &request) override;
+  ConnectController() = default;
+  Reply handleRequest(Request request) override;
 };
-} }
+}
 
 #endif

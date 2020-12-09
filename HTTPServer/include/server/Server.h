@@ -4,15 +4,11 @@
 #include <string>
 #include <boost/asio.hpp>
 
-#include "ConnectionManager.h"
-
-namespace http {
 namespace server {
-
 class Server {
 public:
-  Server(const std::string &address,
-         int port);
+  Server(const std::string &addr,
+         unsigned short port);
 
   void run();
 
@@ -20,14 +16,12 @@ private: // functions
   void setAccept();
 
 private: // functions
-  boost::asio::io_context io_context_;
-  boost::asio::ip::tcp::acceptor acceptor_;
-  int port_;
-  ConnectionManager connectionManager_;
   std::string address_;
+  unsigned short port_;
+  int threads;
+  boost::asio::io_context context_;
 };
 
-}
 }
 
 #endif //COMREDSERVER_SERVER_H

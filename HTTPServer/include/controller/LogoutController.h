@@ -2,15 +2,13 @@
 #define COMREDSERVER_LOGOUTCONTROLLER_H
 
 #include "Controller.h"
-#include "requests/Request.h"
-#include "requests/Reply.h"
 
-namespace http { namespace server {
+namespace server {
 class LogoutController : public Controller {
 public:
-  LogoutController();
-  Reply handleRequest(const Request &request) override;
+  LogoutController() = default;
+  Reply handleRequest(Request request) override;
 };
-} }
+}
 
 #endif

@@ -2,15 +2,13 @@
 #define COMREDSERVER_CREATECONTROLLER_H
 
 #include "Controller.h"
-#include "requests/Request.h"
-#include "requests/Reply.h"
 
-namespace http { namespace server {
+namespace server {
 class CreateController : public Controller {
 public:
-  CreateController();
-  Reply handleRequest(const Request &request) override;
+  CreateController() = default;
+  Reply handleRequest(Request request) override;
 };
-} }
+}
 
 #endif

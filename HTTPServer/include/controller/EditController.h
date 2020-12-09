@@ -2,15 +2,13 @@
 #define COMREDSERVER_EDITCONTROLLER_H
 
 #include "Controller.h"
-#include "requests/Request.h"
-#include "requests/Reply.h"
 
-namespace http { namespace server {
+namespace server {
 class EditController : public Controller {
 public:
-  EditController();
-  Reply handleRequest(const Request &request) override;
+  EditController() = default;
+  Reply handleRequest(Request request) override;
 };
-} }
+}
 
 #endif

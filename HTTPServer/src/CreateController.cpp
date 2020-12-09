@@ -1,7 +1,4 @@
 #include "controller/CreateController.h"
-http::server::CreateController::CreateController() {
-
-}
-http::Reply http::server::CreateController::handleRequest(const http::Request &request) {
-  return http::Reply();
+server::Reply server::CreateController::handleRequest(server::Request request) {
+  return server::Reply();
 }

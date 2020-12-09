@@ -1,7 +1,5 @@
 #include "controller/EditController.h"
-http::server::EditController::EditController() {
 
-}
-http::Reply http::server::EditController::handleRequest(const http::Request &request) {
-  return http::Reply();
+server::Reply server::EditController::handleRequest(server::Request request) {
+  return server::Reply();
 }
