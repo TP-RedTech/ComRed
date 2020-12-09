@@ -10,8 +10,13 @@ class Operation {
   size_t lenBeforeOperation;
   size_t lenAfterOperation;
   std::vector<Change> ops;
+  int revision;
 
  public:
+
+  const int& getRevision() const;
+
+  void setRevision(const int& newRevision);
 
   size_t getLenBeforeOperation() const;
 

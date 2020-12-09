@@ -1,5 +1,13 @@
 #include "Operation.h"
 
+const int& Operation::getRevision() const {
+  return revision;
+}
+
+void Operation::setRevision(const int& newRevision) {
+  revision = newRevision;
+}
+
 size_t Operation::getLenBeforeOperation() const {
   return lenBeforeOperation;
 }
