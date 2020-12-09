@@ -1,5 +1,21 @@
 #include "Operation.h"
 
+Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0) {
+}
+
+Operation::Operation(const Operation& newOp) {
+  lenAfterOperation = newOp.getLenAfterOperation();
+  lenBeforeOperation = newOp.getLenBeforeOperation();
+  ops = newOp.ops;
+}
+
+Operation& Operation::operator=(const Operation& newOp) {
+  lenAfterOperation = newOp.getLenAfterOperation();
+  lenBeforeOperation = newOp.getLenBeforeOperation();
+  ops = newOp.ops;
+  return *this;
+}
+
 const int& Operation::getRevision() const {
   return revision;
 }
@@ -30,9 +46,6 @@ void Operation::addOperation(const Change& change) {
 
 std::vector<Change> Operation::getChanges() const {
   return ops;
-}
-
-Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0) {
 }
 
 void Operation::retain(int newNumber) {

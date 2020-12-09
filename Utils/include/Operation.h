@@ -13,6 +13,12 @@ class Operation {
   std::vector<Change> ops;
 
  public:
+  
+  Operation();
+
+  Operation(const Operation& newOp);
+
+  Operation& operator=(const Operation& newOp);
 
   const int& getRevision() const;
 
@@ -29,8 +35,6 @@ class Operation {
   void addOperation(const Change& change);
 
   std::vector<Change> getChanges() const;
-
-  Operation();
 
   // skip characters
   void retain(int newNumber);
