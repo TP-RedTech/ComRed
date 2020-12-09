@@ -9,8 +9,8 @@ class Operation {
  private:
   size_t lenBeforeOperation;
   size_t lenAfterOperation;
-  std::vector<Change> ops;
   int revision;
+  std::vector<Change> ops;
 
  public:
 

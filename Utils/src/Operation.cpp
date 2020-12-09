@@ -32,7 +32,7 @@ std::vector<Change> Operation::getChanges() const {
   return ops;
 }
 
-Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0){
+Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0) {
 }
 
 void Operation::retain(int newNumber) {
