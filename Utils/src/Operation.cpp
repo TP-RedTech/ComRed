@@ -1,19 +1,31 @@
 #include "Operation.h"
 
-Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0) {
+Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0), idEditor(-1) {
 }
 
 Operation::Operation(const Operation& newOp) {
   lenAfterOperation = newOp.getLenAfterOperation();
   lenBeforeOperation = newOp.getLenBeforeOperation();
+  revision = newOp.revision;
+  idEditor = newOp.idEditor;
   ops = newOp.ops;
 }
 
 Operation& Operation::operator=(const Operation& newOp) {
   lenAfterOperation = newOp.getLenAfterOperation();
   lenBeforeOperation = newOp.getLenBeforeOperation();
+  revision = newOp.revision;
+  idEditor = newOp.idEditor;
   ops = newOp.ops;
   return *this;
+}
+
+const int& Operation::getIdEditor() const {
+  return idEditor;
+}
+
+void Operation::setIdEditor(const int& newIdEditor) {
+  idEditor = newIdEditor;
 }
 
 const int& Operation::getRevision() const {

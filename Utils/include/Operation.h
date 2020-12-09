@@ -10,15 +10,20 @@ class Operation {
   size_t lenBeforeOperation;
   size_t lenAfterOperation;
   int revision;
+  int idEditor;
   std::vector<Change> ops;
 
  public:
-  
+
   Operation();
 
   Operation(const Operation& newOp);
 
   Operation& operator=(const Operation& newOp);
+
+  const int& getIdEditor() const;
+
+  void setIdEditor(const int& newIdEditor);
 
   const int& getRevision() const;
 
