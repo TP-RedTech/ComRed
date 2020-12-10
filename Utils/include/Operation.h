@@ -1,8 +1,11 @@
 #ifndef UTILS_INCLUDE_OPERATION_H_
 #define UTILS_INCLUDE_OPERATION_H_
 
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/classification.hpp>
 #include <iostream>
 #include <vector>
+
 #include "Change.h"
 
 class Operation {
@@ -61,6 +64,8 @@ class Operation {
   //Transform takes two operations A and B that happened concurrently and
   // produces two operations A' and B' (in an array)
   std::vector<Operation> transform(const Operation& secondOp);
+
+  void makeOpFromString(std::string opStr);
 };
 
 #endif //UTILS_INCLUDE_OPERATION_H_

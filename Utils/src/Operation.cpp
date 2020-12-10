@@ -330,3 +330,17 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
   return std::vector<Operation>{newOpForFirst, newOpForSecond};
 }
 
+void Operation::makeOpFromString(std::string opStr) {
+  std::vector<std::string> opsFromStr;
+  boost::split(opsFromStr, opStr, boost::is_any_of(","));
+
+  for (auto & op : opsFromStr) {
+    if (std::isdigit(op[0])) {
+      retain(std::stoi(op));
+    } else if (op[0] == '-') {
+      erase(std::stoi(op)) ;
+    } else {
+      insert(op);
+    }
+  }
+}

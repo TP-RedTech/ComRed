@@ -14,8 +14,13 @@ file(GLOB test_source
         "${PROJECT_SOURCE_DIR}/test/*.cpp"
         )
 
+FIND_PACKAGE( Boost COMPONENTS program_options REQUIRED )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+
+
 add_library(Utils STATIC ${sources})
 target_include_directories(Utils PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(Utils PUBLIC ${Boost_INCLUDE_DIR})
 
 add_executable(gtest ${test_source})
 target_link_libraries(gtest  Utils ServerApplication ${GTEST_LIBRARIES} pthread)
