@@ -6,11 +6,11 @@
 class BaseEditor {
 public:
     virtual ~BaseEditor() = default;
-    virtual Operation submitToServer(Operation operation) = 0;
+    virtual Operation submitToServer(std::shared_ptr<Operation> operation) = 0;
     virtual Operation makeNewOperation() = 0;
-    virtual void changeDocument(Operation operation) = 0;
+    virtual void changeDocument(std::shared_ptr<Operation> operation) = 0;
 
-    virtual void hearChangesFromServer() = 0;
+    virtual void hearChangesFromServer(std::shared_ptr<Operation> operation) = 0;
     virtual void hearSubmitFromServer() = 0;
 
     virtual int getId() = 0;
@@ -18,26 +18,24 @@ public:
 
 class Editor: public BaseEditor {
 public:
-    Editor() {
-        std::cout << "Editor" << " manager has been constructed" << std::endl;
-    }
+    Editor(): id(-1) { }
+
     Editor(int idEditor, const std::shared_ptr<EditorManager>& editorManager):
             id(idEditor),
-            waitingForSendOperation(0) {
+            sendedOperation(nullptr),
+            waitingForSendOperation() {
         this->editorManager = editorManager;
         syncRevision = editorManager->getLastRevision();
         document = editorManager->getCurrentVersionOfDocument();
-        std::cout << "Editor" << " manager has been constructed" << std::endl;
     }
-    ~Editor() {
-        std::cout << "Editor" << " manager has been destructed" << std::endl;
-    }
-    Operation submitToServer(Operation operation) override;
+
+    ~Editor() { }
+    Operation submitToServer(std::shared_ptr<Operation> operation) override;
     Operation makeNewOperation() override;
-    void changeDocument(Operation operation) override;
+    void changeDocument(std::shared_ptr<Operation> operation) override;
 
     // Observers Methods
-    void hearChangesFromServer() override;
+    void hearChangesFromServer(std::shared_ptr<Operation> operation) override;
     void hearSubmitFromServer() override;
 
     int getId() override;
@@ -45,10 +43,12 @@ public:
 private:
     int id;
     int syncRevision;
-    Operation *sendedOperation;
+    std::shared_ptr<Operation> sendedOperation;
     std::shared_ptr<Document> document;
-    std::vector<Operation> waitingForSendOperation;
+    std::deque<std::shared_ptr<Operation>> waitingForSendOperation;
     std::weak_ptr<EditorManager> editorManager;
+
+    // std::mutex;
 };
 
 // Проверка на наличие указателя. Не уничтожили его до этого

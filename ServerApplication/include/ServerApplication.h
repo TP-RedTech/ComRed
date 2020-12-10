@@ -11,7 +11,7 @@ public:
     BaseServerApplication() = default;
     virtual ~BaseServerApplication() { }
     virtual int createDocument(std::string userData, std::string documentName) = 0;
-    virtual std::vector<std::string> updateDocument(int editorId, int docId, std::vector<std::string> operations) = 0;
+    virtual void updateDocument(int editorId, int docId, std::string operations) = 0;
     virtual void deleteDocument(std::string userData, int docId) = 0;
     virtual std::string readDocument(std::string userData, int docId) = 0;
     virtual std::string connectDocument(int editorId, int docId) = 0;
@@ -32,7 +32,7 @@ public:
     }
 
     int createDocument(std::string userData, std::string documentName) override;
-    std::vector<std::string> updateDocument(int editorId, int docId, std::vector<std::string> operations) override;
+    void updateDocument(int editorId, int docId, std::string operations) override;
     void deleteDocument(std::string userData, int docId) override;
     std::string readDocument(std::string userData, int docId) override;
     std::string connectDocument(int editorId, int docId) override;
