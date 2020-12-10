@@ -1,25 +1,34 @@
 #ifndef UNTITLED_SESSION_H
 #define UNTITLED_SESSION_H
 
-#include "ServerHeader.h"
-#include "EditorManager.h"
+#include "Editor.h"
 
 class BaseSession {
 public:
     virtual ~BaseSession() = default;
-    virtual void manageOperation(Operation operation) = 0;
+    virtual void manageOperation(int idEditor, std::shared_ptr<Operation> operation) = 0;
     virtual std::vector<Operation> sendToServerBufOfhanger() = 0;
+    virtual void addEditor(int idEditor) = 0;
 };
 
 class Session: public BaseSession {
 public:
-    Session() = default;
-    void manageOperation(Operation operation) override;
+    Session(const Session&) = delete;
+    Session(Session&&) = delete;
+    Session(int idDocument, std::shared_ptr<EditorManager> editorManager): editorManager(std::move(editorManager)), idDocument(idDocument), editors(0), bufferOfChanges(0)
+    { }
+
+    ~Session() { }
+
+    void manageOperation(int idEditor, std::shared_ptr<Operation> operation) override;
     std::vector<Operation> sendToServerBufOfhanger() override;
+    void addEditor(int idEditor) override;
+    int getIdDocument();
 
 private:
-    EditorManager editorManager;
-    std::vector<Editor> editors;
+    int idDocument;
+    std::shared_ptr<EditorManager> editorManager;
+    std::vector<std::shared_ptr<Editor>> editors;
     std::vector<Operation> bufferOfChanges;
 };
 
