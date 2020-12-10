@@ -256,7 +256,6 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
         if (op1.isInsert()) {
             newOpForFirst.insert(op1.str);
             newOpForSecond.retain(op1.str.size());
-            std::cout << ops.size() << std::endl;
             if (idx1 < ops.size()) {
                 op1 = ops.at(idx1++);
             } else {
