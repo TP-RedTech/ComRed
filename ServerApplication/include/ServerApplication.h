@@ -9,42 +9,36 @@
 class BaseServerApplication {
 public:
     BaseServerApplication() = default;
-    virtual ~BaseServerApplication() { }
+    virtual ~BaseServerApplication() = default;
     virtual int createDocument(std::string userData, std::string documentName) = 0;
-    virtual void updateDocument(int editorId, int docId, std::string operations) = 0;
+    virtual std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) = 0;
     virtual void deleteDocument(std::string userData, int docId) = 0;
     virtual std::string readDocument(std::string userData, int docId) = 0;
-    virtual std::string connectDocument(int editorId, int docId) = 0;
+    virtual std::string connectDocument(std::string userData, int docId) = 0;
     virtual std::string loginUser(std::string userData) = 0;
     virtual std::string registerUser(std::string userData) = 0;
     virtual std::string logoutUser(std::string userData) = 0;
     virtual std::string updateUser(std::string userData, std::string newUserData) = 0;
-
 };
 
 class ServerApplication: public BaseServerApplication {
 public:
-    ServerApplication() {
-        sessions = std::vector<std::shared_ptr<Session>>();
-    }
-
-    virtual ~ServerApplication() {
-    }
-
+    ServerApplication() = default;
+    ~ServerApplication() override;
     int createDocument(std::string userData, std::string documentName) override;
-    void updateDocument(int editorId, int docId, std::string operations) override;
+    std::vector<std::string> updateDocument(std::string userData, int docId, std::vector<std::string> operations) override;
     void deleteDocument(std::string userData, int docId) override;
     std::string readDocument(std::string userData, int docId) override;
-    std::string connectDocument(int editorId, int docId) override;
+    std::string connectDocument(std::string userData, int docId) override;
     std::string loginUser(std::string userData) override;
     std::string registerUser(std::string userData) override;
     std::string logoutUser(std::string userData) override;
     std::string updateUser(std::string userData, std::string newUserData) override;
 
 private:
-    std::vector<std::shared_ptr<Session>> sessions;
-
-    void addSession(std::shared_ptr<Session> session);
+    std::unique_ptr<std::vector<Session>> sessions;
+    std::shared_ptr<DocumentRepositoryI> documentManager;
+    std::shared_ptr<UserRepository> userManager;
 };
 
 

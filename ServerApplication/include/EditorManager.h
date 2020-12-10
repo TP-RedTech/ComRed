@@ -3,54 +3,42 @@
 
 #include "ServerHeader.h"
 
-#include "../../Utils/include/Document.h"
-#include "../../Utils/include/Operation.h"
+#include "EditorManagerDelegate.h"
+#include "Editor.h"
+#include "EditorListener.h"
 
-class Editor;
+#include "../../Utils/include/Document.h"
 
 class BaseEditorManager {
 public:
     virtual ~BaseEditorManager() = default;
     virtual Operation changeOperationRelativelyOthers(Operation operation) = 0;
-    virtual void addOperationToLog(std::shared_ptr<Operation> operation) = 0;
-    virtual void changeServerDocument() = 0;
+    virtual void addOperationToLog(Operation operation) = 0;
+    virtual void changeServerDocument(Document document) = 0;
     virtual void sendOperationToClient(Operation operation) = 0;
     virtual void sendAnswerToOriginalClient(Operation operation) = 0;
-    virtual void addOperationToQueue(std::shared_ptr<Operation> operation) = 0;
-    virtual int getLastRevision() = 0;
 };
 
-class EditorManager: public BaseEditorManager {
+class EditorManager: public BaseEditorManager, public EditorManagerDelegate {
 public:
-    EditorManager(std::shared_ptr<Document> document): document(std::make_shared<Document>(document)), logRevision(0),
-                                                       waitingForProcessing(), editors(0) { }
-
-    EditorManager(std::shared_ptr<EditorManager> editorManager): document(editorManager->document), logRevision(editorManager->logRevision), waitingForProcessing(editorManager->waitingForProcessing), editors(0)
-    { }
-
-    ~EditorManager() {
-        logRevision.clear();
-        waitingForProcessing.clear();
+    EditorManager();
+    EditorManager(Document* document) {
+        this->document = document;
     }
-
     Operation changeOperationRelativelyOthers(Operation operation) override;
-    void addOperationToLog(std::shared_ptr<Operation> operation) override;
-    void changeServerDocument() override;
+    void addOperationToLog(Operation operation) override;
+    void changeServerDocument(Document document) override;
     void sendOperationToClient(Operation operation) override;
     void sendAnswerToOriginalClient(Operation operation) override;
 
     // Delegate Method
-    void addOperationToQueue(std::shared_ptr<Operation> operation) override;
-
-    int getLastRevision() override;
-    std::shared_ptr<Document> getCurrentVersionOfDocument();
-    void addEeditor(const std::shared_ptr<Editor>& editor);
+    void addOperationToQueue(Operation operation) override;
 
 private:
-    std::shared_ptr<Document> document;
-    std::vector<std::shared_ptr<Operation>> logRevision;
-    std::deque<std::shared_ptr<Operation>> waitingForProcessing;
-    std::vector<std::weak_ptr<Editor>> editors;
+    Document* document;
+    std::vector<Operation> logRevision;
+    std::vector<EditorListener> editors;
+    std::queue<Operation> waitingForProcessing;
 };
 
 #endif //UNTITLED_EDITORMANAGER_H
