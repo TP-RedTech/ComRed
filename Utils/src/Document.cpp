@@ -14,6 +14,6 @@ std::string Document::getText() {
     return text;
 }
 
-void Document::updateText(Operation operation) {
-    text += "Override updateText() with OT\n";
+void Document::updateText(std::shared_ptr<Operation> operation) {
+    text = operation->applyToString(text);
 }

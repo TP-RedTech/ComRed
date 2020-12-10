@@ -1,8 +1,11 @@
 #include "Session.h"
 
-void Session::manageOperation(int idEditor, Operation operation) {
-    for (int i = 0; i < editors.size(); i++) {
-        break;
+void Session::manageOperation(int idEditor, std::shared_ptr<Operation> operation) {
+    for (std::vector<std::shared_ptr<Editor>>::const_iterator i = editors.cbegin(); i != editors.cend(); i++) {
+        if ((*i)->getId() == idEditor) {
+            (*i)->changeDocument(operation);
+            break;
+        }
     }
 }
 
@@ -19,7 +22,7 @@ void Session::addEditor(int idEditor) {
     std::shared_ptr<Editor> newEditor(new Editor(idEditor, editorManager));
     editors.push_back(newEditor);
     editorManager->addEeditor(newEditor);
-    std::cout<< "added editor with id: " << editors.back()->getId() << std::endl;
+    std::cout<< "Added editor with id: " << editors.back()->getId() << std::endl;
 }
 
 

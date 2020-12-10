@@ -32,8 +32,12 @@ int main(int argc, const char * argv[]) {
 
     std::unique_ptr<ServerApplication> server(new ServerApplication());
     server->connectDocument(1, 30);
+    server->connectDocument(3, 30);
+    std::string line = "kek";
+    server->updateDocument(1, 30, line);
     server->connectDocument(2, 30);
-    server->connectDocument(2, 30);
+    server->updateDocument(2, 30, "-1,Hello,2");
+    server->updateDocument(3, 30, "7,MAN");
 
     std::cout << "\nHello, World!\n" << std::endl;
     return 0;

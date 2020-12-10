@@ -7,5 +7,7 @@
 #include "string"
 #include "queue"
 #include "memory"
+#include "mutex"
+#include "deque"
 
 #endif //UNTITLED_SERVERHEADER_H
