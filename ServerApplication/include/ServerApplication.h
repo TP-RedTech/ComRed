@@ -6,19 +6,24 @@
 #include "../../DB/include/DocumentRepository.h"
 #include "../../DB/include/UserRepository.h"
 
+enum class ApplicationErrors {
+    failure,
+    success,
+};
+
 class BaseServerApplication {
 public:
     BaseServerApplication() = default;
     virtual ~BaseServerApplication() { }
-    virtual int createDocument(std::string userData, std::string documentName) = 0;
-    virtual void updateDocument(int editorId, int docId, std::string operations) = 0;
-    virtual void deleteDocument(std::string userData, int docId) = 0;
-    virtual std::string readDocument(std::string userData, int docId) = 0;
-    virtual std::string connectDocument(int editorId, int docId) = 0;
-    virtual std::string loginUser(std::string userData) = 0;
-    virtual std::string registerUser(std::string userData) = 0;
-    virtual std::string logoutUser(std::string userData) = 0;
-    virtual std::string updateUser(std::string userData, std::string newUserData) = 0;
+    virtual std::pair<ApplicationErrors, std::string> createDocument(int editorId, std::string documentName) = 0;
+    virtual std::pair<ApplicationErrors, std::string> updateDocument(int editorId, int docId, int cursorPosition, std::string operations) = 0;
+    virtual std::pair<ApplicationErrors, std::string> deleteDocument(int editorId, int docId) = 0;
+    virtual std::pair<ApplicationErrors, std::string> readDocument(std::string userData, int docId) = 0;
+    virtual std::pair<ApplicationErrors, std::string> connectDocument(int editorId, int docId) = 0;
+    virtual std::pair<ApplicationErrors, std::string> loginUser(std::string userData) = 0;
+    virtual std::pair<ApplicationErrors, std::string> registerUser(std::string userData) = 0;
+    virtual std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) = 0;
+    virtual std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) = 0;
 
 };
 
@@ -31,15 +36,15 @@ public:
     virtual ~ServerApplication() {
     }
 
-    int createDocument(std::string userData, std::string documentName) override;
-    void updateDocument(int editorId, int docId, std::string operations) override;
-    void deleteDocument(std::string userData, int docId) override;
-    std::string readDocument(std::string userData, int docId) override;
-    std::string connectDocument(int editorId, int docId) override;
-    std::string loginUser(std::string userData) override;
-    std::string registerUser(std::string userData) override;
-    std::string logoutUser(std::string userData) override;
-    std::string updateUser(std::string userData, std::string newUserData) override;
+    std::pair<ApplicationErrors, std::string> createDocument(int editorId, std::string documentName) override;
+    std::pair<ApplicationErrors, std::string> updateDocument(int editorId, int docId, int cursorPosition, std::string operations) override;
+    std::pair<ApplicationErrors, std::string> deleteDocument(int editorId, int docId) override;
+    std::pair<ApplicationErrors, std::string> readDocument(std::string userData, int docId) override;
+    std::pair<ApplicationErrors, std::string> connectDocument(int editorId, int docId) override;
+    std::pair<ApplicationErrors, std::string> loginUser(std::string userData) override;
+    std::pair<ApplicationErrors, std::string> registerUser(std::string userData) override;
+    std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) override;
+    std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) override;
 
 private:
     std::vector<std::shared_ptr<Session>> sessions;
