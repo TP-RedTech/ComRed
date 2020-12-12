@@ -7,7 +7,7 @@ namespace server {
 class LogoutController : public Controller {
 public:
   LogoutController() = default;
-  Reply handleRequest(Request request) override;
+  http::response <http::string_body> handleRequest(http::request <http::string_body> &&request) override;
 };
 }
 

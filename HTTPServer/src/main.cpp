@@ -3,6 +3,6 @@
 
 int main()
 {
-  server::Server s("127.0.0.1", 5555);
+  server::Server s("127.0.0.1", 5555, 4);
   s.run();
 }

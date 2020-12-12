@@ -10,8 +10,8 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 file(GLOB sources
         "${PROJECT_SOURCE_DIR}/include/*.h"
         "${PROJECT_SOURCE_DIR}/include/server/*.h"
-        "${PROJECT_SOURCE_DIR}/include/controller/*.h"
-        "${PROJECT_SOURCE_DIR}/include/requests/*.h"
+        "include/server/requests/controller/*.h"
+        "include/server/requests/*.h"
         "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
 find_package(Boost 1.71 REQUIRED)

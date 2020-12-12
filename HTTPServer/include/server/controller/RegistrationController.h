@@ -7,7 +7,7 @@ namespace server {
 class RegistrationController : public Controller {
 public:
   RegistrationController() = default;
-  Reply handleRequest(Request request) override;
+  http::response <http::string_body> handleRequest(http::request <http::string_body> &&request) override;
 };
 }
 

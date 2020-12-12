@@ -2,13 +2,15 @@
 #define COMREDSERVER_SERVER_H
 
 #include <string>
-#include <boost/asio.hpp>
+#include <vector>
+
+#include <boost/asio/io_context.hpp>
 
 namespace server {
 class Server {
 public:
   Server(const std::string &addr,
-         unsigned short port);
+         unsigned short port, int threads);
 
   void run();
 
@@ -18,8 +20,8 @@ private: // functions
 private: // functions
   std::string address_;
   unsigned short port_;
-  int threads;
   boost::asio::io_context context_;
+  int threads_;
 };
 
 }
