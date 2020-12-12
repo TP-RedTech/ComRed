@@ -1,7 +1,8 @@
-#include "controller/CreateController.h"
-http::server::CreateController::CreateController() {
+#include "server/controller/CreateController.h"
 
+namespace server {
+http::response <http::string_body> server::CreateController::handleRequest(http::request <http::string_body> &&request) {
+  http::response<http::string_body> res;
+  return res;
 }
-http::Reply http::server::CreateController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }

@@ -1,7 +1,8 @@
-#include "controller/LoginController.h"
-http::server::LoginController::LoginController() {
+#include "server/controller/LoginController.h"
 
+namespace server {
+http::response <http::string_body> server::LoginController::handleRequest(http::request <http::string_body> &&request) {
+  http::response<http::string_body> res;
+  return res;
 }
-http::Reply http::server::LoginController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }
