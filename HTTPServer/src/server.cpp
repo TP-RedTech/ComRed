@@ -9,23 +9,22 @@ Server::Server(const std::string &addr,
                int threads) :
     address_(addr),
     port_(port),
-    threads_(threads),
-    context_(threads) {
+    context_(threads),
+    threads_(threads) {
 }
 
 void Server::run() {
   std::make_shared<Listener>(context_, tcp::endpoint{net::ip::make_address(address_), port_})->run();
   net::io_context &ioc = context_;
   auto runContext = [&ioc] { ioc.run(); };
+  std::vector<std::thread> v;
   if (threads_ > 1) {
-    std::vector<std::thread> v;
     v.reserve(threads_ - 1);
     for (size_t i = threads_ - 1; i > 0; --i) {
       v.emplace_back(runContext);
     }
-    ioc.run();
-  } else
-    ioc.run();
+  }
+  ioc.run();
 }
 
 void Server::setAccept() {

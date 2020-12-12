@@ -16,8 +16,7 @@ public:
     doRead();
   }
 
-  void
-  doRead() {
+  void doRead() {
     req_ = {};
 
     stream_.expires_after(std::chrono::seconds(30));
@@ -60,12 +59,12 @@ public:
     doRead();
   }
 
-  void
-  doClose() {
+  void doClose() {
     beast::error_code ec;
+    std::cerr << "Closed\n" << endl;
     stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
-
   }
+
 private:
   struct SendLambda {
     Connection &self_;

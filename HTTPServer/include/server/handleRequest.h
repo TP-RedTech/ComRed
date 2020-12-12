@@ -49,13 +49,13 @@ void handleRequest(http::request<Body, http::basic_fields<Allocator>> &&req,
 
   std::shared_ptr<Controller> controller;
   std::cout << req.target() << std::endl;
-  if (req.method() == http::verb::get && req.target() == "connect") {
+  if (req.method() == http::verb::get && req.target() == "/connect") {
     controller = std::make_shared<ConnectController>();
-  } else if (req.method() == http::verb::post && req.target() == "edit") {
+  } else if (req.method() == http::verb::post && req.target() == "/edit") {
     controller = std::make_shared<EditController>();
-  } else if (req.method() == http::verb::post && req.target() == "delete") {
+  } else if (req.method() == http::verb::post && req.target() == "/delete") {
     controller = std::make_shared<DeleteController>();
-  } else if (req.method() == http::verb::post && req.target() == "create") {
+  } else if (req.method() == http::verb::post && req.target() == "/create") {
     controller = std::make_shared<CreateController>();
   }
 

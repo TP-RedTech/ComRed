@@ -3,7 +3,7 @@ project(ComRed)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include(configure_gtest.cmake)
+#include(configure_gtest.cmake)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
@@ -18,8 +18,13 @@ find_package(Boost 1.71 REQUIRED)
 find_package(Threads)
 
 include_directories(${Boost_INCLUDE_DIRS})
+file(GLOB ServerApplication_DIRS
+        "../ServerApplication/include*")
+include_directories(${ServerApplication_DIRS})
 
-add_executable(ComRedServer ${sources})
+add_executable(server ${sources})
 
-target_link_libraries(ComRedServer
-            ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(server
+            ${CMAKE_THREAD_LIBS_INIT}
+            ServerApplication
+        )

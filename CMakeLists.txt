@@ -11,5 +11,5 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 add_subdirectory(Utils)
 add_subdirectory(ServerApplication)
-add_subdirectory(HTTPServer)
 add_subdirectory(DB)
+add_subdirectory(HTTPServer)

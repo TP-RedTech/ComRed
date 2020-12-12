@@ -5,6 +5,8 @@
 #include <boost/beast/http.hpp>
 #include <boost/asio.hpp>
 
+#include "ServerApplication.h"
+
 namespace server {
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>

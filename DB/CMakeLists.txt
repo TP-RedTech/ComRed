@@ -17,11 +17,11 @@ file(GLOB TEST_SRC
 add_library(DB STATIC ${SRC}) 
 target_include_directories(DB PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
-add_executable(test_db ${TEST_SRC})
-target_link_libraries(test_db 
-                        DB
-                        Utils
-                        ServerApplication
-)
-target_link_libraries(test_db ${GTEST_LIBRARIES} pthread)
-target_link_libraries(test_db -lgmock)
+#add_executable(test_db ${TEST_SRC})
+#target_link_libraries(test_db 
+#                        DB
+#                        Utils
+#                        ServerApplication
+#)
+#target_link_libraries(test_db ${GTEST_LIBRARIES} pthread)
+#target_link_libraries(test_db -lgmock)
