@@ -78,43 +78,43 @@ using namespace http;
 //class MockConnectController : public server::ConnectController {
 //public:
 //  MockConnectController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockCreateController : public server::CreateController {
 //public:
 //  MockCreateController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockDeleteController : public server::DeleteController {
 //public:
 //  MockDeleteController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockEditController : public server::EditController {
 //public:
 //  MockEditController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockLoginController : public server::LoginController {
 //public:
 //  MockLoginController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockLogoutController : public server::LogoutController {
 //public:
 //  MockLogoutController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 //class MockRegistrationController : public server::RegistrationController {
 //public:
 //  MockRegistrationController() = default;
-//  MOCK_METHOD1(handleRequest, Reply(const Request &request));
+//  MOCK_METHOD1(handleRequest, Reply(const Request &Request));
 //};
 //
 
@@ -274,3 +274,8 @@ TEST_F(RegistrationController, test1) {
   Reply r = controller->handleRequest(q);
   ASSERT_EQ(r.headers["type"], "register");
 }
+
+//int main(int argc, char **argv) {
+//  ::testing::InitGoogleTest(&argc, argv);
+//  return RUN_ALL_TESTS();
+//}

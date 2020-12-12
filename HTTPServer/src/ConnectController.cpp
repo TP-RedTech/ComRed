@@ -1,7 +1,11 @@
-#include "controller/ConnectController.h"
+#include "server/controller/ConnectController.h"
 
-http::server::ConnectController::ConnectController() = default;
-
-http::Reply http::server::ConnectController::handleRequest(const http::Request &request) {
-  return http::Reply();
+namespace server {
+http::response <http::string_body> server::ConnectController::handleRequest(http::request <http::string_body> &&request) {
+  http::response<http::string_body> res;
+  res.keep_alive(request.keep_alive());
+  res.body() = "Connected";
+  res.prepare_payload();
+  return res;
+}
 }
