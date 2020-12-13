@@ -28,12 +28,17 @@ public:
 };
 
 class ServerApplication: public BaseServerApplication {
-public:
-    ServerApplication() {
-        sessions = std::vector<std::shared_ptr<Session>>();
-    }
+protected:
+    ServerApplication(): sessions(0) { }
+    ServerApplication(const ServerApplication&);
+    ServerApplication& operator=(ServerApplication&);
 
-    virtual ~ServerApplication() {
+public:
+    static std::shared_ptr<ServerApplication> get_instance() {
+        if (instance == nullptr) {
+            instance =  std::shared_ptr<ServerApplication>(new ServerApplication) ;
+        }
+        return instance;
     }
 
     std::pair<ApplicationErrors, std::string> createDocument(int editorId, std::string documentName) override;
@@ -47,6 +52,7 @@ public:
     std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) override;
 
 private:
+    static std::shared_ptr<ServerApplication> instance;
     std::vector<std::shared_ptr<Session>> sessions;
 
     void addSession(std::shared_ptr<Session> session);

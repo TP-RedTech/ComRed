@@ -74,3 +74,5 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(std::str
 void ServerApplication::addSession(std::shared_ptr<Session> session) {
     sessions.push_back(std::move(session));
 }
+
+std::shared_ptr<ServerApplication> ServerApplication::instance;
