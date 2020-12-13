@@ -35,7 +35,7 @@ void DocumentRepository::changeDoc(Document& d)
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "UPDATE document SET text = '%1%' WHERE id = %2%;") 
+            "UPDATE document SET dtext = '%1%' WHERE id = %2%;") 
             % d.getText()
             % d.getId()
         ).str();
@@ -80,7 +80,7 @@ Document DocumentRepository::getById(int id)
     } 
     else
         throw runtime_error("no db controller.");
-    return Document(stoi(query_result[0][0]), query_result[0][1]); 
+    return Document(); //Document(stoi(query_result[0][0]), query_result[0][1]); 
 }
 
 vector<Document> DocumentRepository::getByUser(User& u) 
@@ -98,7 +98,7 @@ vector<Document> DocumentRepository::getByUser(User& u)
         if (ctrl->runQuery(query, query_result) != true)
             throw runtime_error("cannot get document.");
         for (auto row: query_result)
-            result.emplace_back(stoi(row[0]), row[1]);
+            result.emplace_back(); //stoi(row[0]), row[1]);
     } 
     else
         throw runtime_error("no db controller.");

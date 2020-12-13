@@ -44,7 +44,9 @@ void DBController::createPool(int size)
     ifstream fin(CONFIG, ios_base::in);
     if (fin.is_open()) 
     {
-        fin >> connectString;
+        string param = "";
+        while (fin >> param)
+            connectString += param + " ";
         fin.close();
     }
     try

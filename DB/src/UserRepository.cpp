@@ -46,7 +46,7 @@ User UserRepository::getById(int id)
     } 
     else
         throw runtime_error("no db controller.");
-    return User(stoi(query_result[0][0]), query_result[0][1], query_result[0][2]); 
+    return User(); //User(stoi(query_result[0][0]), query_result[0][1], query_result[0][2]); 
 }
 
 void UserRepository::updateUser(User& u) 

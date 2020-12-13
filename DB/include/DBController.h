@@ -9,7 +9,7 @@
 #include "AbstractDBController.h"
 
 #define DEFAULT_SIZE 10
-#define CONFIG "../DB/config.txt"
+#define CONFIG "../DB/db_config.txt"
 
 using namespace std;
 
