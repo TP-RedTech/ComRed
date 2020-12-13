@@ -70,7 +70,7 @@ Document DocumentRepository::getById(int id)
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "SELECT * FROM document WHERE id = %1%;") 
+            "SELECT d.id, d.dtext, ow.user_id FROM document AS d JOIN ownership AS ow ON d.id = ow.doc_id WHERE d.id = %1%;") 
             % id
         ).str();
     if (auto ctrl = db.lock()) 
@@ -80,7 +80,11 @@ Document DocumentRepository::getById(int id)
     } 
     else
         throw runtime_error("no db controller.");
-    return Document(); //Document(stoi(query_result[0][0]), query_result[0][1]); 
+
+    Document doc(stoi(query_result[0][0]), query_result[0][1]);
+    for (auto row: query_result)
+        doc.addOwner(stoi(row[3]));
+    return doc; 
 }
 
 vector<Document> DocumentRepository::getByUser(User& u) 
@@ -88,7 +92,7 @@ vector<Document> DocumentRepository::getByUser(User& u)
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "SELECT * FROM document AS d JOIN ownership AS ow ON d.id = ow.doc_id WHERE ow.user_id = %1%;") 
+            "SELECT d.id, d.dtext FROM document AS d JOIN ownership AS ow ON d.id = ow.doc_id WHERE ow.user_id = %1%;") 
             % u.getId()
         ).str();
 
@@ -98,7 +102,10 @@ vector<Document> DocumentRepository::getByUser(User& u)
         if (ctrl->runQuery(query, query_result) != true)
             throw runtime_error("cannot get document.");
         for (auto row: query_result)
-            result.emplace_back(); //stoi(row[0]), row[1]);
+        {
+            result.emplace_back(stoi(row[0]), row[1]);
+            result.back().addOwner(u.getId());
+        }
     } 
     else
         throw runtime_error("no db controller.");

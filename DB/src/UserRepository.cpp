@@ -46,7 +46,12 @@ User UserRepository::getById(int id)
     } 
     else
         throw runtime_error("no db controller.");
-    return User(); //User(stoi(query_result[0][0]), query_result[0][1], query_result[0][2]); 
+
+    User user;
+    user.setId(stoi(query_result[0][0]));
+    user.setName(query_result[0][1]);
+    user.setPassword(query_result[0][2]);
+    return user; 
 }
 
 void UserRepository::updateUser(User& u) 
@@ -54,7 +59,7 @@ void UserRepository::updateUser(User& u)
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "UPDATE user SET name = '%1%', password = '%2%' WHERE id = %3%;") 
+            "UPDATE user SET username = '%1%', password = '%2%' WHERE id = %3%;") 
             % u.getName()
             % u.getPassword()
             % u.getId()
