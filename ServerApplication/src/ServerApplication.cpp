@@ -12,9 +12,10 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int 
             operation->setIdEditor(editorId);
             operation->makeOpFromString(operations);
             (*i)->manageOperation(editorId, operation);
+            return std::make_pair(ApplicationErrors::success, "Change sent successfully");
         }
     }
-    return std::make_pair(ApplicationErrors::success, "Success");
+    return std::make_pair(ApplicationErrors::failure, "Document is not open");
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(int editorId, int docId) {
