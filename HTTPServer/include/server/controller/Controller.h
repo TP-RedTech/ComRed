@@ -1,23 +1,34 @@
 #ifndef COMREDSERVER_BASECONTROLLER_H
 #define COMREDSERVER_BASECONTROLLER_H
 
-#include <boost/beast.hpp>
-#include <boost/beast/http.hpp>
-#include <boost/asio.hpp>
+#include <iostream>
+#include <utility>
+#include <sstream>
 
 #include "ServerApplication.h"
+#include "server/BeastServerHeader.h"
+#include "server/BasicResponses.h"
 
 namespace server {
-
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+using ServerApplicationOut = std::pair<ApplicationErrors, std::string>;
 
 class Controller {
 public:
   Controller() = default;
-  virtual http::response<http::string_body> handleRequest(http::request <http::string_body> &&request) = 0;
+  virtual http::response <http::string_body> handleRequest(http::request <http::string_body> &&request) {
+    http::response <http::string_body> res;
+    auto applicationResponse = handle(request.body());
+    if (applicationResponse.first == ApplicationErrors::success) {
+      res.body() = std::move(applicationResponse.second);
+      res.keep_alive(request.keep_alive());
+      res.prepare_payload();
+    } else {
+      return BasicResponses::serverError(request, "Server is tired and can't handle this");
+    }
+    return res;
+  }
+protected:
+  virtual ServerApplicationOut handle(const string &body) = 0;
 };
 }
 

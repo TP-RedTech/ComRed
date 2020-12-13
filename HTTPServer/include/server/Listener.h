@@ -2,6 +2,7 @@
 #define COMREDSERVER_LISTENER_H
 
 #include "Connection.h"
+#include "BeastServerHeader.h"
 
 namespace server {
 class Listener : public std::enable_shared_from_this<Listener> {

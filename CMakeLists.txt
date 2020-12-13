@@ -3,7 +3,7 @@ project(ComRed)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-Wall")
+#set(CMAKE_CXX_FLAGS "-Wall")
 
 enable_testing()
 find_package(GTest REQUIRED)

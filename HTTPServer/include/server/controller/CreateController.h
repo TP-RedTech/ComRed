@@ -6,7 +6,8 @@ namespace server {
 class CreateController : public Controller {
 public:
   CreateController() = default;
-  http::response<http::string_body> handleRequest(http::request<http::string_body> &&request) override;
+private:
+  ServerApplicationOut handle(const string &body) override;
 };
 }
 

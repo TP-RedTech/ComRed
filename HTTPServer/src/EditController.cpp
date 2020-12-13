@@ -1,12 +1,12 @@
 #include "server/controller/EditController.h"
 
 namespace server {
-http::response <http::string_body> server::EditController::handleRequest(http::request <http::string_body> &&request) {
-  http::response<http::string_body> res;
-  res.keep_alive(request.keep_alive());
-  res.body() = "Edited\n";
-  res.prepare_payload();
-  std::cout << request.body() << std::endl;
-  return res;
-}
+ServerApplicationOut EditController::handle(const std::string &body) {
+  std::istringstream ss(body);
+  int editorId, docId, cursorPosition;
+  std::string operations;
+  ss >> editorId >> docId >> cursorPosition;
+  getline(ss, operations);
+  return ServerApplication::get_instance()->updateDocument(editorId, docId, cursorPosition, operations);
+};
 }

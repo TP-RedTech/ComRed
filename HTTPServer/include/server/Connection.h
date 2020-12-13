@@ -41,10 +41,7 @@ public:
     handleRequest(std::move(req_), lambda_);
   }
 
-  void onWrite(
-      bool close,
-      beast::error_code ec,
-      std::size_t bytes_transferred) {
+  void onWrite(bool close, beast::error_code ec, std::size_t bytes_transferred) {
     boost::ignore_unused(bytes_transferred);
 
     if (ec)

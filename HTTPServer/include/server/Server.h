@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <boost/asio/io_context.hpp>
+#include "BeastServerHeader.h"
 
 namespace server {
 class Server {
@@ -20,7 +20,7 @@ private: // functions
 private: // functions
   std::string address_;
   unsigned short port_;
-  boost::asio::io_context context_;
+  net::io_context context_;
   int threads_;
 };
 

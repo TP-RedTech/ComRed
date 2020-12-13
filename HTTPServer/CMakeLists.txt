@@ -26,5 +26,5 @@ add_executable(server ${sources})
 
 target_link_libraries(server
             ${CMAKE_THREAD_LIBS_INIT}
-            ServerApplication
+            ServerApplication Utils
         )
