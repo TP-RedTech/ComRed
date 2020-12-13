@@ -3,6 +3,9 @@
 namespace server {
 
 ServerApplicationOut DeleteController::handle(const string &body) {
-  return server::ServerApplicationOut();
+  std::istringstream is;
+  int editorId, documentId;
+  is >> editorId >> documentId;
+  return ServerApplication::get_instance()->deleteDocument(editorId, documentId);
 }
 }
