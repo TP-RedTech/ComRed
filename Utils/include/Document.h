@@ -38,11 +38,13 @@ public:
 
     void setId(int newId);
 
+    void addOwner(int idEditor);
+
 private:
     int id;
     std::string text;
     std::string password;
-
+    std::vector<int> owners;
 };
 
 #endif //UTILS_INCLUDE_DOCUMENT_H_

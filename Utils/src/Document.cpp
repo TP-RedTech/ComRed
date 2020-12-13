@@ -17,3 +17,12 @@ std::string Document::getText() {
 void Document::updateText(std::shared_ptr<Operation> operation) {
     text = operation->applyToString(text);
 }
+
+void Document::addOwner(int idEditor) {
+    for (int i = 0; i < owners.size(); i++) {
+        if (owners[i] == idEditor) {
+            return;
+        }
+    }
+    owners.push_back(idEditor);
+}
