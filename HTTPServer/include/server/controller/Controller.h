@@ -23,7 +23,7 @@ public:
       res.keep_alive(request.keep_alive());
       res.prepare_payload();
     } else {
-      return BasicResponses::serverError(request, "Server is tired and can't handle this");
+      return BasicResponses::serverError(request, applicationResponse.second);
     }
     return res;
   }
