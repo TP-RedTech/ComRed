@@ -4,10 +4,12 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <fstream>
 #include <pqxx/pqxx>
 #include "AbstractDBController.h"
 
 #define DEFAULT_SIZE 10
+#define CONFIG "../DB/db_config.txt"
 
 using namespace std;
 
@@ -21,11 +23,13 @@ public:
                   vector<vector<string>>& result) override;
 
 private:
-    queue<pqxx::connection> connectionPool;
+    queue<shared_ptr<pqxx::connection>> connectionPool;
+    mutex mtx;
+    condition_variable cond;
 
     void createPool(int size);
-    pqxx::connection& getConnection(void);
-    void freeConnection(pqxx::connection& connection);
+    shared_ptr<pqxx::connection> getConnection(void);
+    void freeConnection(shared_ptr<pqxx::connection> connection);
 };
 
 #endif
