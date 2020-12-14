@@ -1,7 +1,11 @@
-#include "controller/DeleteController.h"
-http::server::DeleteController::DeleteController() {
+#include "server/controller/DeleteController.h"
 
+namespace server {
+
+ServerApplicationOut DeleteController::handle(const string &body) {
+  std::istringstream is;
+  int editorId, documentId;
+  is >> editorId >> documentId;
+  return ServerApplication::get_instance()->deleteDocument(editorId, documentId);
 }
-http::Reply http::server::DeleteController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }

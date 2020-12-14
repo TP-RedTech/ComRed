@@ -1,10 +1,10 @@
 #include "ServerApplication.h"
 
-int ServerApplication::createDocument(std::string userData, std::string documentName) {
-    return 0;
+std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(int editorId, std::string documentName) {
+    return std::make_pair(ApplicationErrors::success, "Document was successfully created");
 }
 
-void ServerApplication::updateDocument(int editorId, int docId, std::string operations) {
+std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int editorId, int docId, int cursorPosition, std::string operations) {
     for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
             // TODO:- From std::string to Operation
@@ -12,33 +12,35 @@ void ServerApplication::updateDocument(int editorId, int docId, std::string oper
             operation->setIdEditor(editorId);
             operation->makeOpFromString(operations);
             (*i)->manageOperation(editorId, operation);
+            return std::make_pair(ApplicationErrors::success, "Change sent successfully");
         }
     }
+    return std::make_pair(ApplicationErrors::failure, "Document is not open");
 }
 
-void ServerApplication::deleteDocument(std::string userData, int docId){
+std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(int editorId, int docId) {
     //
     for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
-            // TODO: Delete session with this docId
+            // TODO: Delete document with this Id
             i = sessions.erase(i);
+            return std::make_pair(ApplicationErrors::success, "Document was successfully deleted");
         }
     }
-
-    // TODO: Delete this document from DB
+    return std::make_pair(ApplicationErrors::failure, "This document does not exist");
 }
 
-std::string ServerApplication::readDocument(std::string userData, int docId) {
-    return std::string();
+std::pair<ApplicationErrors, std::string> ServerApplication::readDocument(std::string userData, int docId) {
+    return std::make_pair(ApplicationErrors::success, "Success");
 }
 
-std::string ServerApplication::connectDocument(int editorId, int docId) {
+std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int editorId, int docId) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
             // TODO: Change id edtior
             // Some id editor
             (*i)->addEditor(editorId);
-            return std::string();
+            return std::make_pair(ApplicationErrors::success, "Editor was successfully added");
         }
     }
 
@@ -50,25 +52,27 @@ std::string ServerApplication::connectDocument(int editorId, int docId) {
     session->addEditor(editorId);
     this->addSession(session);
 
-    return std::string();
+    return std::make_pair(ApplicationErrors::success, "Session created, Editor added");
 }
 
-std::string ServerApplication::loginUser(std::string userData) {
-    return std::string();
+std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(std::string userData) {
+    return std::make_pair(ApplicationErrors::success, "User was successfully logined");
 }
 
-std::string ServerApplication::registerUser(std::string userData) {
-    return std::string();
+std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(std::string userData) {
+    return std::make_pair(ApplicationErrors::success, "User was successfully registred");
 }
 
-std::string ServerApplication::logoutUser(std::string userData){
-    return std::string();
+std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(std::string userData){
+    return std::make_pair(ApplicationErrors::success, "User was successfully logouted");
 }
 
-std::string ServerApplication::updateUser(std::string userData, std::string newUserData) {
-    return std::string();
+std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(std::string userData, std::string newUserData) {
+    return std::make_pair(ApplicationErrors::success, "User was successfully updated");
 }
 
 void ServerApplication::addSession(std::shared_ptr<Session> session) {
     sessions.push_back(std::move(session));
 }
+
+std::shared_ptr<ServerApplication> ServerApplication::instance;

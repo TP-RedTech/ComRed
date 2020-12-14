@@ -23,19 +23,7 @@ public:
 class EditorManager: public BaseEditorManager {
 public:
     EditorManager(std::shared_ptr<Document> document): document(std::make_shared<Document>(document)), logRevision(0),
-                                                       waitingForProcessing(), editors(0) {
-        std::shared_ptr<Operation> oper1 = std::shared_ptr<Operation>(new Operation());
-        oper1->setIdEditor(-1);
-        oper1->makeOpFromString("kek");
-        oper1->setRevision(0);
-        waitingForProcessing.push_back(oper1);
-
-//        std::shared_ptr<Operation> oper2 = std::shared_ptr<Operation>(new Operation());
-//        oper2->setIdEditor(-2);
-//        oper2->makeOpFromString("lol");
-//        oper2->setRevision(0);
-//        waitingForProcessing.push_back(oper2);
-    }
+                                                       waitingForProcessing(), editors(0) { }
 
     EditorManager(std::shared_ptr<EditorManager> editorManager): document(editorManager->document), logRevision(editorManager->logRevision), waitingForProcessing(editorManager->waitingForProcessing), editors(0)
     { }

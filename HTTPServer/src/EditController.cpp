@@ -1,7 +1,13 @@
-#include "controller/EditController.h"
-http::server::EditController::EditController() {
+#include "server/controller/EditController.h"
 
+namespace server {
+ServerApplicationOut EditController::handle(const std::string &body) {
+  std::istringstream ss(body);
+  int editorId, documentId, cursorPosition;
+  std::string operations;
+  ss >> editorId >> documentId >> cursorPosition;
+  ss.ignore(1);
+  getline(ss, operations);
+  return ServerApplication::get_instance()->updateDocument(editorId, documentId, cursorPosition, operations);
 }
-http::Reply http::server::EditController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }

@@ -3,6 +3,6 @@
 
 int main()
 {
-  http::server::Server s("localhost", 5555);
+  server::Server s("127.0.0.1", 5555, 1);
   s.run();
 }

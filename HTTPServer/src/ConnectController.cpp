@@ -1,7 +1,10 @@
-#include "controller/ConnectController.h"
+#include "server/controller/ConnectController.h"
 
-http::server::ConnectController::ConnectController() = default;
-
-http::Reply http::server::ConnectController::handleRequest(const http::Request &request) {
-  return http::Reply();
+namespace server {
+ServerApplicationOut ConnectController::handle(const string &body) {
+  std::istringstream is(body);
+  int editorId, documentId;
+  is >> editorId >> documentId;
+  return ServerApplication::get_instance()->connectDocument(editorId, documentId);
+}
 }

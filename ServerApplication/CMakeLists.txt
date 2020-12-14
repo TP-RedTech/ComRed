@@ -17,8 +17,8 @@ file(GLOB sources
 add_library(ServerApplication STATIC ${sources} src/Editor.cpp include/EditorManagerDelegate.h include/EditorListener.h)
 target_include_directories(ServerApplication PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
-add_executable(main.out main.cpp)
-target_link_libraries(main.out ServerApplication Utils)
+# add_executable(main.out main.cpp)
+# target_link_libraries(main.out ServerApplication Utils)
 
 #add_executable(test_server ${test_source})
 #target_link_libraries(test_server  ServerApplication ${GTEST_LIBRARIES})

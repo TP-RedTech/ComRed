@@ -1,7 +1,8 @@
-#include "controller/RegistrationController.h"
-http::server::RegistrationController::RegistrationController() {
+#include "server/controller/RegistrationController.h"
 
+namespace server {
+
+ServerApplicationOut RegistrationController::handle(const string &body) {
+  return server::ServerApplicationOut();
 }
-http::Reply http::server::RegistrationController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }

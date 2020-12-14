@@ -1,7 +1,8 @@
-#include "controller/LogoutController.h"
-http::server::LogoutController::LogoutController() {
+#include "server/controller/LogoutController.h"
 
+namespace server {
+
+ServerApplicationOut LogoutController::handle(const string &body) {
+  return server::ServerApplicationOut();
 }
-http::Reply http::server::LogoutController::handleRequest(const http::Request &request) {
-  return http::Reply();
 }
