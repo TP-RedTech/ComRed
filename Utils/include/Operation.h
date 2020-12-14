@@ -66,6 +66,8 @@ public:
     std::vector<Operation> transform(const Operation& secondOp);
 
     void makeOpFromString(std::string opStr);
+
+    std::string toString() const;
 };
 
 #endif //UTILS_INCLUDE_OPERATION_H_

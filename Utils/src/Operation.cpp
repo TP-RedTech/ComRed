@@ -525,3 +525,19 @@ void Operation::makeOpFromString(std::string opStr) {
         }
     }
 }
+
+std::string Operation::toString() const {
+  std::string strOp;
+
+  for (auto & op : ops) {
+    if (op.number) {
+      strOp.push_back(op.number);
+      strOp.push_back(',');
+    } else {
+      strOp += op.str ;
+      strOp.push_back(',');
+    }
+  }
+
+  return strOp;
+}
