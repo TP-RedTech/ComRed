@@ -116,10 +116,8 @@ void Operation::erase(int newNumber) {
 
     lenBeforeOperation -= newNumber;
 
-    if (!ops.empty()) {
-        if (ops[ops.size() - 1].isErase()) {
-            ops[ops.size() - 1].number += newNumber;
-        }
+    if (!ops.empty() && ops[ops.size() - 1].isErase()) {
+        ops[ops.size() - 1].number += newNumber;
     } else {
         Change newChange = Change(newNumber, "");
         ops.push_back(newChange);
