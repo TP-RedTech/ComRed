@@ -15,6 +15,7 @@ void EditorManager::changeServerDocument() {
 
         auto operation = waitingForProcessing.front();
         waitingForProcessing.pop_front();
+        std::cout << ">>" << (operation)->getChanges()[0].number << std::endl;
 
         for (auto iter = waitingForProcessing.begin(); iter != waitingForProcessing.end(); iter++) {
             //iter = operation->transform(*iter)[1];
@@ -22,7 +23,11 @@ void EditorManager::changeServerDocument() {
 
                 int revision = (*iter)->getRevision() + 1;
                 int idEditor = (*iter)->getIdEditor();
+
                 *(iter->get()) = operation->transform(*(iter->get()))[1];
+
+//                std::cout << ">>" << (iter->get())->getChanges()[0].str << " " << (iter->get())->getChanges()[1].str << std::endl;
+
                 (*iter)->setRevision(revision);
                 (*iter)->setIdEditor(idEditor);
             }
@@ -38,6 +43,8 @@ void EditorManager::changeServerDocument() {
                 (*iter).lock()->hearChangesFromServer(operation);
             }
         }
+
+        std::cout << "\n---------------------" << std::endl;
     }
 
 //
@@ -59,6 +66,10 @@ void EditorManager::addOperationToQueue(std::shared_ptr<Operation> operation)  {
 
 int EditorManager::getLastRevision() {
     return 0;
+}
+
+std::string EditorManager::getCurrentTextOfDocument() {
+    return document->getText();
 }
 
 std::shared_ptr<Document> EditorManager::getCurrentVersionOfDocument() {

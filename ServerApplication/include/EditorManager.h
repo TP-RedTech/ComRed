@@ -23,7 +23,20 @@ public:
 class EditorManager: public BaseEditorManager {
 public:
     EditorManager(std::shared_ptr<Document> document): document(std::make_shared<Document>(document)), logRevision(0),
-                                                       waitingForProcessing(), editors(0) { }
+                                                       waitingForProcessing(), editors(0) {
+//        waitingForProcessing
+//        std::string line1 = "hello";
+//        std::shared_ptr<Operation> operation1 = std::shared_ptr<Operation>(new Operation());
+//        operation1->setIdEditor(-1);
+//        operation1->makeOpFromString(line1);
+//        waitingForProcessing.push_back(operation1);
+//
+//        std::string line2 = " world";
+//        std::shared_ptr<Operation> operation2 = std::shared_ptr<Operation>(new Operation());
+//        operation2->setIdEditor(-1);
+//        operation2->makeOpFromString(line2);
+//        waitingForProcessing.push_back(operation2);
+    }
 
     EditorManager(std::shared_ptr<EditorManager> editorManager): document(editorManager->document), logRevision(editorManager->logRevision), waitingForProcessing(editorManager->waitingForProcessing), editors(0)
     { }
@@ -43,6 +56,7 @@ public:
     void addOperationToQueue(std::shared_ptr<Operation> operation) override;
 
     int getLastRevision() override;
+    std::string getCurrentTextOfDocument();
     std::shared_ptr<Document> getCurrentVersionOfDocument();
     void addEeditor(const std::shared_ptr<Editor>& editor);
 

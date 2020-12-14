@@ -40,7 +40,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
             // TODO: Change id edtior
             // Some id editor
             (*i)->addEditor(editorId);
-            return std::make_pair(ApplicationErrors::success, "Editor was successfully added");
+            return std::make_pair(ApplicationErrors::success, (*i)->getDocumentText());
         }
     }
 
@@ -51,8 +51,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
     std::shared_ptr<Session> session(new Session(document->getId(), editorManager));
     session->addEditor(editorId);
     this->addSession(session);
-
-    return std::make_pair(ApplicationErrors::success, "Session created, Editor added");
+    return std::make_pair(ApplicationErrors::success, session->getDocumentText());
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(std::string userData) {

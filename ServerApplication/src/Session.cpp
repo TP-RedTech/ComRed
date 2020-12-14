@@ -29,3 +29,7 @@ void Session::addEditor(int idEditor) {
 int Session::getIdDocument() {
     return idDocument;
 }
+
+std::string Session::getDocumentText() {
+    return editorManager->getCurrentTextOfDocument();
+}

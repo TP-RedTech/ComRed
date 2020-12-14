@@ -24,6 +24,7 @@ public:
     std::vector<Operation> sendToServerBufOfhanger() override;
     void addEditor(int idEditor) override;
     int getIdDocument();
+    std::string getDocumentText();
 
 private:
     int idDocument;
