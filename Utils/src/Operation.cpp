@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "Operation.h"
 
 Operation::Operation() : lenBeforeOperation(0), lenAfterOperation(0), revision(0), idEditor(-1) {
@@ -72,6 +74,7 @@ void Operation::retain(int newNumber) {
         // merge into one operation
         ops[ops.size() - 1].number += newNumber;
     } else {
+        // create new op
         Change newChange = Change(newNumber, "");
         ops.push_back(newChange);
     }
@@ -89,6 +92,7 @@ void Operation::insert(const std::string& newString) {
             // merge insert op
             ops[ops.size() - 1].str += newString;
         } else if (ops[ops.size() - 1].isErase()) {
+            // make that insert op always before erase
             if (ops.size() > 2 && ops[ops.size() - 2].isInsert()) {
                 ops[ops.size() - 2].str += newString;
             } else {
@@ -128,17 +132,16 @@ bool Operation::isNoEffect() const {
 
 std::string Operation::applyToString(const std::string& anotherString) const {
     if (anotherString.size() != lenBeforeOperation) {
-        return nullptr;
+        throw std::length_error("Length Before Operation must be equal string's length");
     }
 
     std::string newString;
     int stringIdx = 0;
-    int newStringIdx = 0;
 
     for (const auto& op : ops) {
         if (op.isRetain()) {
             if (stringIdx + op.number > anotherString.size()) {
-                return nullptr;
+                throw std::length_error("Can't retain more char than left in the string");
             }
             newString += anotherString.substr(stringIdx, op.number);
             stringIdx += op.number;
@@ -149,115 +152,209 @@ std::string Operation::applyToString(const std::string& anotherString) const {
         }
     }
 
+    if (stringIdx != anotherString.size()) {
+      throw std::logic_error("Did not operate the whole string");
+    }
+
     return newString;
 
 }
 
 Operation Operation::compose (const Operation& operation2) {
     if (lenAfterOperation != operation2.getLenBeforeOperation()) {
-        std::cerr << "The base length of the second operation has to be the target length of the first operation";
+        throw std::length_error("The base length of the second operation has to be the target length of the first operation");
     }
     Operation newOp;
     int idx1 = 0;
     int idx2 = 0;
+
+    std::vector<Change> ops2 = operation2.getChanges();
+
     Change op1 = ops[idx1++];
-    Change op2 = operation2.getChanges()[idx2++];
+    Change op2 = ops2[idx2++];
+    size_t op1Size = ops.size();
+    size_t op2Size = operation2.getChanges().size();
+
     while (true) {
-        if (idx1 > ops.size() && idx2 > operation2.getChanges().size()) {
+        if (idx1 > op1Size && idx2 > op2Size) {
             break;
         }
 
         if (op1.isErase()) {
             newOp.erase(op1.number);
+          if (idx1 < op1Size) {
             op1 = ops[idx1++];
-        }
-        if (op2.isInsert()) {
-            newOp.insert(op2.str);
-            op2 = operation2.getChanges()[idx2++];
+          } else {
+            idx1++;
+          }
         }
 
-        if (idx1 > ops.size() || idx2 > operation2.getChanges().size()) {
-            break;
+        if (op2.isInsert()) {
+            newOp.insert(op2.str);
+          if (idx2 < op2Size) {
+            op2 = ops2[idx2++];
+          } else {
+            idx2++;
+          }
+        }
+
+        if (idx1 > op1Size || idx2 > op2Size) {
+            throw std::logic_error("Cannot compose operations");
         }
 
         if (op1.isRetain() && op2.isRetain()) {
+
             if (op1.number > op2.number) {
                 newOp.retain(op2.number);
                 op1.number = op1.number - op2.number;
-                op2 = operation2.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.number == op2.number) {
                 newOp.retain(op1.number);
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = operation2.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 newOp.retain(op1.number);
                 op2.number = op2.number - op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
         } else if (op1.isInsert() && op2.isErase()) {
+
             if (op1.str.size() > -op2.number) {
                 op1.str = op1.str.substr(-op2.number);
-                op2 = operation2.getChanges()[idx2++];
+                op2 = ops2[idx2++];
             } else if (op1.str.size() == -op2.number) {
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = operation2.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 op2.number = op2.number + op1.str.size();
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
         } else if (op1.isInsert() && op2.isRetain()) {
+
             if (op1.str.size() > op2.number) {
                 newOp.insert(op1.str.substr(0, op2.number));
                 op1.str = op1.str.substr(op2.number);
-                op2 = operation2.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.str.size() == op2.number) {
                 newOp.insert(op1.str);
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = operation2.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 newOp.insert(op1.str);
                 op2.number = op2.number - op1.str.size();
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
         } else if (op1.isRetain() && op2.isErase()) {
+
             if (op1.number > -op2.number) {
                 newOp.erase(op2.number);
                 op1.number = op1.number + op2.number;
-                op2 = operation2.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.number == -op2.number) {
                 newOp.erase(op2.number);
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = operation2.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 newOp.erase(op1.number);
                 op2.number = op2.number + op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
         }
-
     }
     return newOp;
 }
 
 std::vector<Operation> Operation::transform(const Operation& secondOp) {
+    if (lenBeforeOperation != secondOp.getLenBeforeOperation()) {
+      throw std::length_error("Both operations have to have the same lenBeforeOperation");
+    }
+
     Operation newOpForFirst;
     Operation newOpForSecond;
     int idx1 = 0;
     int idx2 = 0;
-    Change op1 = ops[idx1++];
 
-    Change op2 = secondOp.getChanges()[idx2++];
+  std::vector<Change> ops2 = secondOp.getChanges();
+
+    Change op1 = ops[idx1++];
+    Change op2 = ops2[idx2++];
+
+    size_t op1Size = ops.size();
+    size_t op2Size = secondOp.getChanges().size();
 
     while (true) {
-        if (idx1 > ops.size() || idx2 > secondOp.getChanges().size()) {
+        if (idx1 > op1Size || idx2 > op2Size) {
             break;
         }
 
         if (op1.isInsert()) {
             newOpForFirst.insert(op1.str);
             newOpForSecond.retain(op1.str.size());
-            if (idx1 < ops.size()) {
-                op1 = ops.at(idx1++);
+            if (idx1 < op1Size) {
+                op1 = ops[idx1++];
             } else {
                 idx1++;
             }
@@ -266,74 +363,148 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
         if (op2.isInsert()) {
             newOpForFirst.retain(op2.str.size());
             newOpForSecond.insert(op2.str);
-            if (idx2 < secondOp.getChanges().size()) {
-                op2 = secondOp.getChanges()[idx2++];
+            if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
             } else {
                 idx2++;
             }
         }
 
-        if (idx1 > ops.size() || idx2 > secondOp.getChanges().size()) {
-            break;
+        if (idx1 > op1Size && idx2 > op2Size) {
+          break;
         }
 
         int minLen = 0;
         if (op1.isRetain() && op2.isRetain()) {
+
             if (op1.number > op2.number) {
                 minLen = op2.number;
                 op1.number = op1.number - op2.number;
-                op2 = secondOp.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.number == op2.number) {
                 minLen = op2.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = secondOp.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 minLen = op1.number;
                 op2.number = op2.number - op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
             newOpForFirst.retain(minLen);
             newOpForSecond.retain(minLen);
+
         } else if (op1.isErase() && op2.isErase()) {
+
             if (-op1.number > -op2.number) {
                 op1.number = op1.number - op2.number;
-                op2 = secondOp.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.number == op2.number) {
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = secondOp.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 op2.number = op2.number - op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
         } else if (op1.isErase() && op2.isRetain()) {
+
             if (-op1.number > op2.number) {
                 minLen = -op2.number;
                 op1.number = op1.number + op2.number;
-                op2 = secondOp.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (-op1.number == op2.number) {
                 minLen = op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = secondOp.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 minLen = op1.number;
                 op2.number = op2.number + op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
             newOpForFirst.erase(minLen);
+
         } else if (op1.isRetain() && op2.isErase()) {
+
             if (op1.number > -op2.number) {
                 minLen = op2.number;
                 op1.number = op1.number + op2.number;
-                op2 = secondOp.getChanges()[idx2++];
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else if (op1.number == -op2.number) {
                 minLen = -op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
-                op2 = secondOp.getChanges()[idx2++];
+              } else {
+                idx1++;
+              }
+              if (idx2 < op2Size) {
+                op2 = ops2[idx2++];
+              } else {
+                idx2++;
+              }
             } else {
                 minLen = -op1.number;
                 op2.number = op2.number + op1.number;
+              if (idx1 < op1Size) {
                 op1 = ops[idx1++];
+              } else {
+                idx1++;
+              }
             }
+
             newOpForSecond.erase(minLen);
         }
     }
