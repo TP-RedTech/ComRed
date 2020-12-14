@@ -531,7 +531,7 @@ std::string Operation::toString() const {
 
   for (auto & op : ops) {
     if (op.number) {
-      strOp.push_back(op.number);
+      strOp += std::to_string(op.number);
       strOp.push_back(',');
     } else {
       strOp += op.str ;
@@ -539,5 +539,6 @@ std::string Operation::toString() const {
     }
   }
 
+  strOp.erase(strOp.size()-1);
   return strOp;
 }
