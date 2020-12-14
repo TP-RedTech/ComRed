@@ -70,7 +70,7 @@ void Operation::retain(int newNumber) {
     lenBeforeOperation += newNumber;
     lenAfterOperation += newNumber;
 
-    if (ops.size() > 1 && ops[ops.size() - 1].isRetain()) {
+    if (!ops.empty() && ops[ops.size() - 1].isRetain()) {
         // merge into one operation
         ops[ops.size() - 1].number += newNumber;
     } else {
@@ -116,7 +116,7 @@ void Operation::erase(int newNumber) {
 
     lenBeforeOperation -= newNumber;
 
-    if (ops.size() > 1) {
+    if (!ops.empty()) {
         if (ops[ops.size() - 1].isErase()) {
             ops[ops.size() - 1].number += newNumber;
         }
