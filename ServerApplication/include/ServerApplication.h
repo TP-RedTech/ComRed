@@ -3,6 +3,7 @@
 
 #include "ServerHeader.h"
 #include "Session.h"
+#include "../../DB/include/DBController.h"
 #include "../../DB/include/DocumentRepository.h"
 #include "../../DB/include/UserRepository.h"
 
@@ -29,9 +30,13 @@ public:
 
 class ServerApplication: public BaseServerApplication {
 protected:
-    ServerApplication(): sessions(0) { }
-    ServerApplication(const ServerApplication&);
-    ServerApplication& operator=(ServerApplication&);
+    ServerApplication(): sessions(0) {
+        controller = std::make_shared<DBController>();
+        docRepository = std::make_shared<DocumentRepository>(controller);
+        userRepository = std::make_shared<UserRepository>(controller);
+    }
+    ServerApplication(const ServerApplication&) = default;
+    ServerApplication& operator=(ServerApplication&) = default;
 
 public:
     static std::shared_ptr<ServerApplication> get_instance() {
@@ -54,6 +59,11 @@ public:
 private:
     static std::shared_ptr<ServerApplication> instance;
     std::vector<std::shared_ptr<Session>> sessions;
+
+    std::shared_ptr<DocumentRepository> docRepository;
+    std::shared_ptr<UserRepository> userRepository;
+
+    std::shared_ptr<DBController> controller;
 
     void addSession(std::shared_ptr<Session> session);
 };
