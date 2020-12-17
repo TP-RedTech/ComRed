@@ -1,6 +1,6 @@
 #include "../include/UserRepository.h"
 
-UserRepository::UserRepository(weak_ptr<AbstractDBController> ctrl) :
+UserRepository::UserRepository(shared_ptr<AbstractDBController> ctrl) :
     db(ctrl) {}
     
 UserRepository::~UserRepository() {}
@@ -10,20 +10,20 @@ void UserRepository::createUser(User& u)
     vector<vector<string>> query_result = {};
     string query1 =
         (boost::format(
-            "INSERT INTO user VALUES(%1%, '%2%', '%3');") 
+            "INSERT INTO users VALUES(%1%, '%2%', '%3');") 
             % "default" 
             % u.getName()
             % u.getPassword()
         ).str();
     string query2 = 
         (boost::format(
-            "SELECT max(id) FROM user;")
+            "SELECT max(id) FROM users;")
         ).str();
-    if (auto ctrl = db.lock()) 
+    if (db) 
     {
-        if (ctrl->runQuery(query1, query_result) != true)
+        if (db->runQuery(query1, query_result) != true)
             throw runtime_error("cannot create user.");
-        if (ctrl->runQuery(query2, query_result) != true)
+        if (db->runQuery(query2, query_result) != true)
             throw runtime_error("cannot get id of user.");
         u.setId(stoi(query_result[0][0]));
     } 
@@ -31,26 +31,26 @@ void UserRepository::createUser(User& u)
         throw runtime_error("no db controller.");
 }
 
-User UserRepository::getById(int id) 
+shared_ptr<User> UserRepository::getById(int id) 
 {
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "SELECT * FROM user WHERE id = %1%;") 
+            "SELECT * FROM users WHERE id = %1%;") 
             % id
         ).str();
-    if (auto ctrl = db.lock()) 
+    if (db) 
     {
-        if (ctrl->runQuery(query, query_result) != true)
+        if (db->runQuery(query, query_result) != true)
             throw runtime_error("cannot get user.");
     } 
     else
         throw runtime_error("no db controller.");
 
-    User user;
-    user.setId(stoi(query_result[0][0]));
-    user.setName(query_result[0][1]);
-    user.setPassword(query_result[0][2]);
+    shared_ptr<User> user = make_shared<User>();
+    user->setId(stoi(query_result[0][0]));
+    user->setName(query_result[0][1]);
+    user->setPassword(query_result[0][2]);
     return user; 
 }
 
@@ -59,14 +59,14 @@ void UserRepository::updateUser(User& u)
     vector<vector<string>> query_result = {};
     string query =
         (boost::format(
-            "UPDATE user SET username = '%1%', password = '%2%' WHERE id = %3%;") 
+            "UPDATE users SET username = '%1%', password = '%2%' WHERE id = %3%;") 
             % u.getName()
             % u.getPassword()
             % u.getId()
         ).str();
-    if (auto ctrl = db.lock()) 
+    if (db) 
     {
-        if (ctrl->runQuery(query, query_result) != true)
+        if (db->runQuery(query, query_result) != true)
             throw runtime_error("cannot update document.");
     } 
     else
