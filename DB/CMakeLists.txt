@@ -18,6 +18,7 @@ file(GLOB SRC
 
 add_library(DB STATIC ${SRC}) 
 target_include_directories(DB PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(DB PRIVATE Utils)
 
 set(PostgreSQL_TYPE_INCLUDE_DIR "/usr/include/postgresql")
 find_package(PostgreSQL REQUIRED)

@@ -17,33 +17,33 @@ public:
     virtual void createTest(Document& d) = 0;
     virtual void changeTest(Document& d) = 0;
     virtual void deleteTest(Document& d) = 0;
-    virtual Document getIdTest(int id) = 0;
-    virtual vector<Document> getUserTest(User& u) = 0;
+    virtual shared_ptr<Document> getIdTest(int id) = 0;
+    virtual vector<shared_ptr<Document>> getUserTest(User& u) = 0;
     virtual void addUserTest(User& u, Document& d) = 0;
 };
 
 class DocumentRepository : public DocumentRepositoryI
 {
 public:
-    DocumentRepository(weak_ptr<AbstractDBController> ctrl);
+    DocumentRepository(shared_ptr<AbstractDBController> ctrl);
     ~DocumentRepository();
 
     void createDoc(Document& d);
     void changeDoc(Document& d);
     void deleteDoc(Document& d);
-    Document getById(int id);
-    vector<Document> getByUser(User& u);
+    shared_ptr<Document> getById(int id);
+    vector<shared_ptr<Document>> getByUser(User& u);
     void addUser(User& u, Document& d);
 
     virtual void createTest(Document& d) { createDoc(d); }
     virtual void changeTest(Document& d) { changeDoc(d); }
     virtual void deleteTest(Document& d) { deleteDoc(d); }
-    virtual Document getIdTest(int id) { return getById(id); }
-    virtual vector<Document> getUserTest(User& u) { return getByUser(u); }
+    virtual shared_ptr<Document> getIdTest(int id) { return getById(id); }
+    virtual vector<shared_ptr<Document>> getUserTest(User& u) { return getByUser(u); }
     virtual void addUserTest(User& u, Document& d) { addUser(u, d); }
 
 private:
-    weak_ptr<AbstractDBController> db;
+    shared_ptr<AbstractDBController> db;
 };
 
 #endif

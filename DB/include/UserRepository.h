@@ -15,25 +15,25 @@ public:
     virtual ~UserRepositoryI() = default;
     virtual void createTest(User& u) = 0;
     virtual void updateTest(User& u) = 0;
-    virtual User getTest(int id) = 0;
+    virtual shared_ptr<User> getTest(int id) = 0;
 };
 
 class UserRepository : public UserRepositoryI
 {
 public:
-    UserRepository(weak_ptr<AbstractDBController> ctrl);
+    UserRepository(shared_ptr<AbstractDBController> ctrl);
     ~UserRepository();
 
     void createUser(User& u);
     void updateUser(User& u);
-    User getById(int id);
+    shared_ptr<User> getById(int id);
 
     virtual void createTest(User& u) { createUser(u); }
     virtual void updateTest(User& u) { updateUser(u); }
-    virtual User getTest(int id) { return getById(id); }
+    virtual shared_ptr<User> getTest(int id) { return getById(id); }
 
 private:
-    weak_ptr<AbstractDBController> db;
+    shared_ptr<AbstractDBController> db;
 };
 
 #endif
