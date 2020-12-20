@@ -30,13 +30,20 @@ int main(int argc, const char * argv[]) {
 //    session->addEditor(5);
 //    session->addEditor(9);
 
-    std::unique_ptr<ServerApplication> server(new ServerApplication());
-    server->connectDocument(1, 30);
-    server->connectDocument(3, 30);
-    std::string line = "tik";
-    server->updateDocument(3, 30, line);
-//    server->connectDocument(2, 30);
-//    server->updateDocument(1, 30, "-1,Hello,2");
+
+    std::shared_ptr<ServerApplication> server = ServerApplication::get_instance();
+    int idDoc = 10;
+    server->connectDocument(10, idDoc);
+    server->updateDocument(10, idDoc, 0, "kekek");
+    auto res = server->getTextDocument(idDoc);
+    std::cout << "response: " << res.second << std::endl;
+
+//    server->connectDocument(1, 100);
+//    server->connectDocument(3, 1);
+//    std::string line = "tik";
+//    server->updateDocument(3, 1, 0, line);
+//    server->connectDocument(2, 1);
+//    server->updateDocument(1, 1, 0, "-1,Hello,2");
 //    server->updateDocument(3, 30, "7,MAN");
 
     std::cout << "\nHello, World!\n" << std::endl;

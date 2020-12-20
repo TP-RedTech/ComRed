@@ -19,7 +19,7 @@ public:
     explicit DBController(int size = DEFAULT_SIZE);
     ~DBController();
 
-    bool runQuery(const string& query, 
+    bool runQuery(const string& query,
                   vector<vector<string>>& result) override;
 
 private:
