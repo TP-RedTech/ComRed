@@ -1,7 +1,16 @@
 #include "ServerApplication.h"
 
 std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(int editorId, std::string documentName) {
-    return std::make_pair(ApplicationErrors::success, "Document was successfully created");
+    Document doc;
+    try {
+        docRepository->createDoc(doc);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Error with creating document");;
+    };
+
+    std::cout << "Document was successfully created with id " + std::to_string(doc.getId()) << std::endl;
+    return std::make_pair(ApplicationErrors::success, "Document was successfully created with id " + std::to_string(doc.getId()));
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int editorId, int docId, int cursorPosition, std::string operations) {
@@ -12,14 +21,29 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int 
             operation->setIdEditor(editorId);
             operation->makeOpFromString(operations);
             (*i)->manageOperation(editorId, operation);
+            
+            if ((*i)->getCounter() >= 5) {
+                (*i)->setCounter(0);
+                this->saveDocument(docId);
+            }
+
             return std::make_pair(ApplicationErrors::success, "Change sent successfully");
         }
     }
     return std::make_pair(ApplicationErrors::failure, "Document is not open");
 }
 
+std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(int docId) {
+    for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
+        if ((*i)->getIdDocument() == docId) {
+
+            return std::make_pair(ApplicationErrors::success, (*i)->getDocumentText());
+        }
+    }
+    return std::make_pair(ApplicationErrors::failure, "Document is not open");
+}
+
 std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(int editorId, int docId) {
-    //
     for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
             // TODO: Delete document with this Id
@@ -46,12 +70,31 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
 
     // If no such session has been created
     // TODO: Get document with this id from db
-    std::shared_ptr<Document> document(new Document(docId, ""));
+    std::shared_ptr<Document> document;
+    try {
+        std::cout << docRepository->getById(docId)->getId() << " " << docRepository->getById(docId)->getText() << std::endl;
+        document = docRepository->getById(docId);
+    } catch(const std::exception& error) {
+        std::cout << "Document was not created" << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Document was not created");;
+    };
     std::shared_ptr<EditorManager> editorManager(new EditorManager(document));
     std::shared_ptr<Session> session(new Session(document->getId(), editorManager));
     session->addEditor(editorId);
     this->addSession(session);
     return std::make_pair(ApplicationErrors::success, session->getDocumentText());
+}
+
+std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(int docId) {
+    for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
+        if ((*i)->getIdDocument() == docId) {
+            // Some id editor
+            Document document((*i)->getIdDocument(), (*i)->getDocumentText());
+            docRepository->changeDoc(document);
+            return std::make_pair(ApplicationErrors::success, "Document has been saved");
+        }
+    }
+    return std::make_pair(ApplicationErrors::failure, "Document does not exist");
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(std::string userData) {

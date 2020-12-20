@@ -15,7 +15,9 @@ class Session: public BaseSession {
 public:
     Session(const Session&) = delete;
     Session(Session&&) = delete;
-    Session(int idDocument, std::shared_ptr<EditorManager> editorManager): editorManager(std::move(editorManager)), idDocument(idDocument), editors(0), bufferOfChanges(0)
+    Session(int idDocument, std::shared_ptr<EditorManager> editorManager): counter(0),
+                            editorManager(std::move(editorManager)), idDocument(idDocument),
+                            editors(0), bufferOfChanges(0)
     { }
 
     ~Session() { }
@@ -26,7 +28,12 @@ public:
     int getIdDocument();
     std::string getDocumentText();
 
+    int getCounter();
+    void setCounter(const int& num);
+
 private:
+    int counter;
+
     int idDocument;
     std::shared_ptr<EditorManager> editorManager;
     std::vector<std::shared_ptr<Editor>> editors;

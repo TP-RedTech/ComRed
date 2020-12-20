@@ -4,6 +4,7 @@ void Session::manageOperation(int idEditor, std::shared_ptr<Operation> operation
     for (std::vector<std::shared_ptr<Editor>>::const_iterator i = editors.cbegin(); i != editors.cend(); i++) {
         if ((*i)->getId() == idEditor) {
             (*i)->changeDocument(operation);
+            counter++;
             break;
         }
     }
@@ -32,4 +33,14 @@ int Session::getIdDocument() {
 
 std::string Session::getDocumentText() {
     return editorManager->getCurrentTextOfDocument();
+}
+
+int Session::getCounter() {
+    return counter;
+}
+
+void Session::setCounter(const int& num) {
+    if (num >= 0) {
+        counter = num;
+    }
 }

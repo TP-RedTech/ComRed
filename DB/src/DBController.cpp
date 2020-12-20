@@ -1,17 +1,17 @@
 #include "../include/DBController.h"
 
-DBController::DBController(int size) 
+DBController::DBController(int size)
 {
     createPool(size);
 }
 
-DBController::~DBController() 
+DBController::~DBController()
 {
 
 }
 
-bool DBController::runQuery(const string& query, 
-                            vector<vector<string>>& result) 
+bool DBController::runQuery(const string& query,
+                            vector<vector<string>>& result)
 {
     auto connect = getConnection();
     pqxx::work worker(*connect.get());
@@ -21,6 +21,11 @@ bool DBController::runQuery(const string& query,
         pqxx::result r = worker.exec(query);
         worker.commit();
         result.clear();
+
+        if (r.empty() && r.affected_rows() == 0) {
+            flag = false;
+        }
+
         for (auto row: r)
         {
             result.push_back(vector<string>());
@@ -38,11 +43,11 @@ bool DBController::runQuery(const string& query,
     return flag;
 }
 
-void DBController::createPool(int size) 
+void DBController::createPool(int size)
 {
     string connectString = "";
     ifstream fin(CONFIG, ios_base::in);
-    if (fin.is_open()) 
+    if (fin.is_open())
     {
         string param = "";
         while (fin >> param)
@@ -51,7 +56,7 @@ void DBController::createPool(int size)
     }
     try
     {
-        for (int i = 0; i < size; ++i) 
+        for (int i = 0; i < size; ++i)
             connectionPool.push(make_shared<pqxx::connection>(connectString));
     }
     catch(const std::exception& e)
@@ -60,10 +65,10 @@ void DBController::createPool(int size)
     }
 }
 
-shared_ptr<pqxx::connection> DBController::getConnection(void) 
+shared_ptr<pqxx::connection> DBController::getConnection(void)
 {
     unique_lock<mutex> lock(mtx);
-    while (connectionPool.empty()) 
+    while (connectionPool.empty())
     {
         cond.wait(lock);
     }
@@ -73,7 +78,7 @@ shared_ptr<pqxx::connection> DBController::getConnection(void)
     return connect;
 }
 
-void DBController::freeConnection(shared_ptr<pqxx::connection> connection) 
+void DBController::freeConnection(shared_ptr<pqxx::connection> connection)
 {
     unique_lock<mutex> lock(mtx);
     connectionPool.push(connection);

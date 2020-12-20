@@ -13,7 +13,7 @@ public:
     AbstractDBController() = default;
     virtual ~AbstractDBController() = default;
 
-    virtual bool runQuery(const string& query, 
+    virtual bool runQuery(const string& query,
                           vector<vector<string>>& result) = 0;
 };
 
