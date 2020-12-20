@@ -21,6 +21,12 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int 
             operation->setIdEditor(editorId);
             operation->makeOpFromString(operations);
             (*i)->manageOperation(editorId, operation);
+            
+            if ((*i)->getCounter() >= 5) {
+                (*i)->setCounter(0);
+                this->saveDocument(docId);
+            }
+
             return std::make_pair(ApplicationErrors::success, "Change sent successfully");
         }
     }
