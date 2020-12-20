@@ -9,7 +9,7 @@
 #include <iostream>
 
 namespace server {
-void fail(beast::error_code ec, char const *what) {
+inline void fail(beast::error_code ec, char const *what) {
   std::cerr << what << ": " << ec.message() << "\n";
 }
 
@@ -26,6 +26,8 @@ void handleRequest(http::request<Body, http::basic_fields<Allocator>> &&req,
     controller = std::make_shared<DeleteController>();
   } else if (req.method() == http::verb::post && req.target() == "/create") {
     controller = std::make_shared<CreateController>();
+  } else if (req.method() == http::verb::get && req.target() == "/getText") {
+    controller = std::make_shared<GetTextController>();
   }
 
   if (controller)
@@ -34,4 +36,4 @@ void handleRequest(http::request<Body, http::basic_fields<Allocator>> &&req,
 }
 }
 
-#endif //COMREDSERVER_INCLUDE_SERVER_REQUESTS_HANDLEREQUEST_H
+#endif

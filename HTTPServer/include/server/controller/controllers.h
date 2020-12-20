@@ -8,6 +8,7 @@
 #include "LoginController.h"
 #include "LogoutController.h"
 #include "RegistrationController.h"
+#include "GetTextController.h"
 
 
 #endif //COMREDSERVER_INCLUDE_CONTROLLER_CONTROLLERS_H
