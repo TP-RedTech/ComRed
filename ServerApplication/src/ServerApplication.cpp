@@ -14,7 +14,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(int 
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int editorId, int docId, int cursorPosition, std::string operations) {
-    for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
+    for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
             // TODO:- From std::string to Operation
             std::shared_ptr<Operation> operation = std::shared_ptr<Operation>(new Operation());
@@ -34,7 +34,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int 
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(int docId) {
-    for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
+    for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
 
             return std::make_pair(ApplicationErrors::success, (*i)->getDocumentText());
@@ -44,9 +44,8 @@ std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(int
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(int editorId, int docId) {
-    for (std::vector<std::shared_ptr<Session>>::const_iterator i = sessions.cbegin(); i != sessions.cend(); i++) {
+    for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
-            // TODO: Delete document with this Id
             i = sessions.erase(i);
             return std::make_pair(ApplicationErrors::success, "Document was successfully deleted");
         }
@@ -61,15 +60,11 @@ std::pair<ApplicationErrors, std::string> ServerApplication::readDocument(std::s
 std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int editorId, int docId) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == docId) {
-            // TODO: Change id edtior
-            // Some id editor
             (*i)->addEditor(editorId);
             return std::make_pair(ApplicationErrors::success, (*i)->getDocumentText());
         }
     }
 
-    // If no such session has been created
-    // TODO: Get document with this id from db
     std::shared_ptr<Document> document;
     try {
         std::cout << docRepository->getById(docId)->getId() << " " << docRepository->getById(docId)->getText() << std::endl;
@@ -83,6 +78,24 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
     session->addEditor(editorId);
     this->addSession(session);
     return std::make_pair(ApplicationErrors::success, session->getDocumentText());
+}
+
+std::pair<ApplicationErrors, std::string> ServerApplication::disconnect(int editorId, int docId) {
+    for (auto i = sessions.begin(); i != sessions.end(); i++) {
+        if ((*i)->getIdDocument() == docId) {
+            (*i)->removeEditor(editorId);
+//            if ((*i)->counterConnectedEditors() == 0) {
+//                if (sessions.size() == 1) {
+//                    sessions.clear();
+//                } else {
+//                    i = sessions.erase(i);
+//                }
+//                std::cout << "Session " << docId << " has been removed" << std::endl;
+//            }
+            return std::make_pair(ApplicationErrors::success, "Editor was successfully disconnected");
+        }
+    }
+    return std::make_pair(ApplicationErrors::failure, "This session does not exist");
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(int docId) {

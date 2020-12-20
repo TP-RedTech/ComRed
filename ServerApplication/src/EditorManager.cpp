@@ -37,10 +37,12 @@ void EditorManager::changeServerDocument() {
 
         std::cout << "\nSERVER[" << document->getId() << "] DOCUMENT: " << document->getText() << std::endl;
         for (auto iter = editors.cbegin(); iter != editors.cend(); iter++) {
-            if (operation->getIdEditor() == (*iter).lock()->getId()) {
-                (*iter).lock()->hearSubmitFromServer();
-            } else {
-                (*iter).lock()->hearChangesFromServer(operation);
+            if ((*iter).expired() == 0) {
+                if (operation->getIdEditor() == (*iter).lock()->getId()) {
+                    (*iter).lock()->hearSubmitFromServer();
+                } else {
+                    (*iter).lock()->hearChangesFromServer(operation);
+                }
             }
         }
 
