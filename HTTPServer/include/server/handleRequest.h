@@ -29,9 +29,10 @@ void handleRequest(http::request<Body, http::basic_fields<Allocator>> &&req,
   } else if (req.method() == http::verb::get && req.target() == "/getText") {
     controller = std::make_shared<GetTextController>();
   }
-
-  if (controller)
-    return send(controller->handleRequest(move(req)));
+  if (controller) {
+    http::response<http::string_body> res = controller->handleRequest(move(req));
+    return send(move(res));
+  }
   return send(BasicResponses::badRequest(req, "Unknown request"));
 }
 }

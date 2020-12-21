@@ -32,8 +32,7 @@ private:
         : self_(self) {
     }
 
-    template<bool isRequest, class Body, class Fields>
-    void operator()(http::message<isRequest, Body, Fields> &&msg) const;
+    void operator()(http::response<http::string_body> &&msg) const;
   };
 
 private:

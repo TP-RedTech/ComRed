@@ -48,15 +48,11 @@ void Connection::onWrite(bool close, beast::error_code ec, std::size_t bytes_tra
 
 void Connection::doClose() {
   beast::error_code ec;
-  std::cerr << "Closed\n" << endl;
   stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
 }
 
-template<bool isRequest, class Body, class Fields>
-void Connection::SendLambda::operator()(http::message<isRequest, Body, Fields> &&msg) const {
-  auto sp = std::make_shared<
-      http::message<isRequest, Body, Fields >>(std::move(msg));
-
+void Connection::SendLambda::operator()(http::response<http::string_body> &&msg) const {
+  auto sp = std::make_shared<http::response<http::string_body>>(move(msg));
   self_.res_ = sp;
 
   http::async_write(
