@@ -28,6 +28,8 @@ public:
     virtual std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) = 0;
     virtual std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) = 0;
 
+    virtual std::pair<ApplicationErrors, std::string> disconnect(int editorId, int docId) = 0;
+
 };
 
 class ServerApplication: public BaseServerApplication {
@@ -60,9 +62,11 @@ public:
     std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) override;
     std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) override;
 
+    std::pair<ApplicationErrors, std::string> disconnect(int editorId, int docId) override;
+
 private:
     static std::shared_ptr<ServerApplication> instance;
-    std::vector<std::shared_ptr<Session>> sessions;
+    std::deque<std::shared_ptr<Session>> sessions;
 
     std::shared_ptr<DocumentRepository> docRepository;
     std::shared_ptr<UserRepository> userRepository;

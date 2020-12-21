@@ -9,6 +9,7 @@ public:
     virtual void manageOperation(int idEditor, std::shared_ptr<Operation> operation) = 0;
     virtual std::vector<Operation> sendToServerBufOfhanger() = 0;
     virtual void addEditor(int idEditor) = 0;
+    virtual void removeEditor(int idEditor) = 0;
 };
 
 class Session: public BaseSession {
@@ -24,19 +25,24 @@ public:
 
     void manageOperation(int idEditor, std::shared_ptr<Operation> operation) override;
     std::vector<Operation> sendToServerBufOfhanger() override;
+
     void addEditor(int idEditor) override;
+    void removeEditor(int idEditor) override;
+
     int getIdDocument();
     std::string getDocumentText();
 
-    int getCounter();
+    const int getCounter();
     void setCounter(const int& num);
+
+    const int counterConnectedEditors();
 
 private:
     int counter;
 
     int idDocument;
     std::shared_ptr<EditorManager> editorManager;
-    std::vector<std::shared_ptr<Editor>> editors;
+    std::deque<std::shared_ptr<Editor>> editors;
     std::vector<Operation> bufferOfChanges;
 };
 
