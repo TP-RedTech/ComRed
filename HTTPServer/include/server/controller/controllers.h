@@ -2,6 +2,7 @@
 #define COMREDSERVER_CONTROLLERS
 
 #include "ConnectController.h"
+#include "DisconnectController.h"
 #include "CreateController.h"
 #include "DeleteController.h"
 #include "EditController.h"
