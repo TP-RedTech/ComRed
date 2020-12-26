@@ -28,7 +28,7 @@ public:
     virtual std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) = 0;
     virtual std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) = 0;
 
-    virtual std::pair<ApplicationErrors, std::string> disconnect(int editorId, int docId) = 0;
+    virtual std::pair<ApplicationErrors, std::string> disconnectDocument(int editorId, int docId) = 0;
 
 };
 
@@ -62,7 +62,7 @@ public:
     std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) override;
     std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) override;
 
-    std::pair<ApplicationErrors, std::string> disconnect(int editorId, int docId) override;
+    std::pair<ApplicationErrors, std::string> disconnectDocument(int editorId, int docId) override;
 
 private:
     static std::shared_ptr<ServerApplication> instance;

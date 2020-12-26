@@ -80,7 +80,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
     return std::make_pair(ApplicationErrors::success, session->getDocumentText());
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::disconnect(int editorId, int docId) {
+std::pair<ApplicationErrors, std::string> ServerApplication::disconnectDocument(int editorId, int docId) {
     for (auto i = sessions.begin(); i != sessions.end(); i++) {
         if ((*i)->getIdDocument() == docId) {
             (*i)->removeEditor(editorId);
