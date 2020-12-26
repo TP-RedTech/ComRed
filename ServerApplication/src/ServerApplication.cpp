@@ -10,7 +10,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(int 
     };
 
     std::cout << "Document was successfully created with id " + std::to_string(doc.getId()) << std::endl;
-    return std::make_pair(ApplicationErrors::success, "Document was successfully created with id " + std::to_string(doc.getId()));
+    return std::make_pair(ApplicationErrors::success, std::to_string(doc.getId()));
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int editorId, int docId, int cursorPosition, std::string operations) {
