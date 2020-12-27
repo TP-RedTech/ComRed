@@ -10,7 +10,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(int 
     };
 
     std::cout << "Document was successfully created with id " + std::to_string(doc.getId()) << std::endl;
-    return std::make_pair(ApplicationErrors::success, "Document was successfully created with id " + std::to_string(doc.getId()));
+    return std::make_pair(ApplicationErrors::success, std::to_string(doc.getId()));
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(int editorId, int docId, int cursorPosition, std::string operations) {
@@ -80,7 +80,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(int
     return std::make_pair(ApplicationErrors::success, session->getDocumentText());
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::disconnect(int editorId, int docId) {
+std::pair<ApplicationErrors, std::string> ServerApplication::disconnectDocument(int editorId, int docId) {
     for (auto i = sessions.begin(); i != sessions.end(); i++) {
         if ((*i)->getIdDocument() == docId) {
             (*i)->removeEditor(editorId);
