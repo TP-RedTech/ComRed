@@ -158,7 +158,7 @@ std::string Operation::applyToString(const std::string& anotherString) const {
 
 }
 
-Operation Operation::compose (const Operation& operation2) {
+Operation Operation::compose (const Operation& operation2) const {
     if (lenAfterOperation != operation2.getLenBeforeOperation()) {
         throw std::length_error("The base length of the second operation has to be the target length of the first operation");
     }
@@ -325,7 +325,7 @@ Operation Operation::compose (const Operation& operation2) {
     return newOp;
 }
 
-std::vector<Operation> Operation::transform(const Operation& secondOp) {
+std::vector<Operation> Operation::transform(const Operation& secondOp) const {
     if (lenBeforeOperation != secondOp.getLenBeforeOperation()) {
       throw std::length_error("Both operations have to have the same lenBeforeOperation");
     }
@@ -509,7 +509,7 @@ std::vector<Operation> Operation::transform(const Operation& secondOp) {
     return std::vector<Operation>{newOpForFirst, newOpForSecond};
 }
 
-void Operation::makeOpFromString(std::string opStr) {
+void Operation::makeOpFromString(const std::string& opStr) {
     std::vector<std::string> opsFromStr;
     boost::split(opsFromStr, opStr, boost::is_any_of(","));
 

@@ -59,13 +59,13 @@ public:
 
     //for every string and pair of ops A, B must hold
     //apply(apply(S, A), B) = apply(S, compose(A, B))
-    Operation compose (const Operation& operation2);
+    Operation compose (const Operation& operation2) const;
 
     //Transform takes two operations A and B that happened concurrently and
     // produces two operations A' and B' (in an array)
-    std::vector<Operation> transform(const Operation& secondOp);
+    std::vector<Operation> transform(const Operation& secondOp) const;
 
-    void makeOpFromString(std::string opStr);
+    void makeOpFromString(const std::string& opStr);
 
     std::string toString() const;
 };
